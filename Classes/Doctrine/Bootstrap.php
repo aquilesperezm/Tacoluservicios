@@ -1,12 +1,13 @@
 <?php
 // bootstrap.php
-require_once "vendor/autoload.php";
+require_once "../../vendor/autoload.php";
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
+use Symfony\Component\Cache;
 
-$paths = ['Classes/Doctrine/src'];
+$paths = [__Dir__.'/src'];
 $isDevMode = false;
 
 // the connection configuration
