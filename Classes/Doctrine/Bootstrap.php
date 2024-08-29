@@ -5,9 +5,9 @@ require_once "../../vendor/autoload.php";
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
-use Symfony\Component\Cache;
 
-$paths = [__Dir__.'/src'];
+
+$paths = ['../../Entities'];
 $isDevMode = false;
 
 // the connection configuration
