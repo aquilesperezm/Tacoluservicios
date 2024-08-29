@@ -1,0 +1,14 @@
+{% extends "./ExtjsView.html.twig" %}
+
+{% block body %}
+	{{ parent() }}
+{% endblock %}
+
+{% block css %}
+	{{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="{{ asset('Plugins/Tacoluservicios/Apps/Tacoluservicios/app.js') }}"></script>
+{% endblock %}
