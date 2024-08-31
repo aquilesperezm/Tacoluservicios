@@ -41,14 +41,24 @@ class Init extends InitClass
             && !$db->tableExists('tbl_tacografo')
             && !$db->tableExists('tbl_categoria_tacografo')
             && !$db->tableExists('tbl_modelo_tacografo')
-        ){
-            Tools::log()->error('<b>Error:</b> la base de datos no esta sincronizada para el plugin <b style="color:blue">TACOLUSERVICIOS</b>, por favor presione <b>Reconstruir</b>');
+        ) {
+            //  Tools::log()->error('<b>Error:</b> la base de datos no esta sincronizada para el plugin <b style="color:blue">TACOLUSERVICIOS</b>, por favor presione <b>Reconstruir</b>');
         }
-        
-        $db->exec('IF COL_LENGTH("clientes","id_centroautorizado") IS NULL BEGIN 
-        
-        END');
 
+        // echo($db->getTables()[0]->COL_LENGTH);
+        // var_dump($result);
+        // $exists = (mysql_num_rows($result))?TRUE:FALSE;
+
+
+        $result = $db->getColumns('clientes');
+        $exist_column = array_key_exists('id_centroautorizado', $result);
+
+        if (!$exist_column) {
+            $db->exec('ALTER TABLE clientes ADD COLUMN id_centroautorizado INTEGER AFTER web; ');
+            // CONSTRAINT `clientes_fk1` FOREIGN KEY (`id_centroautorizado`) REFERENCES `tbl_centroautorizado` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+            $db->exec('CONSTRAINT "clientes_fk1" FOREIGN KEY (`id_centroautorizado`) REFERENCES `tbl_centroautorizado` (`id`) ON DELETE SET NULL ON UPDATE CASCADE');
+
+        }
     }
 
     public function uninstall(): void
