@@ -51,14 +51,35 @@ class Init extends InitClass
 
 
         $result = $db->getColumns('clientes');
-        $exist_column = array_key_exists('id_centroautorizado', $result);
+        $foreing_keys = $db->getConstraints('clientes');
 
-        if (!$exist_column) {
-            $db->exec('ALTER TABLE clientes ADD COLUMN id_centroautorizado INTEGER AFTER web; ');
-            // CONSTRAINT `clientes_fk1` FOREIGN KEY (`id_centroautorizado`) REFERENCES `tbl_centroautorizado` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-            $db->exec('CONSTRAINT "clientes_fk1" FOREIGN KEY (`id_centroautorizado`) REFERENCES `tbl_centroautorizado` (`id`) ON DELETE SET NULL ON UPDATE CASCADE');
+        $exist_column_idcentroautorizado = array_key_exists('id_centroautorizado', $result);
 
+        $exist_fk_clientes_centroautorizado = false;
+        foreach ($foreing_keys as $key) {
+            if ($key['name'] == 'clientes_fk1') {
+                $exist_fk_clientes_centroautorizado = true;
+                break;
+            }
         }
+
+
+        //        var_dump($foreing_keys);
+
+        if (!$exist_column_idcentroautorizado) {
+            $db->exec('ALTER TABLE clientes ADD COLUMN id_centroautorizado INTEGER AFTER web; ');
+            if ($db->tableExists('tbl_centroautorizado'))
+                $db->exec('CONSTRAINT "clientes_fk1" FOREIGN KEY (`id_centroautorizado`) REFERENCES `tbl_centroautorizado` (`id`) ON DELETE SET NULL ON UPDATE CASCADE');
+            else Tools::log()->error('No existe la tabla tbl_centroautorizado');
+        } else {
+            if ($db->tableExists('tbl_centroautorizado'))
+                if (!$exist_fk_clientes_centroautorizado)
+                    $db->exec('ALTER TABLE clientes ADD CONSTRAINT `clientes_fk1` FOREIGN KEY (`id_centroautorizado`) REFERENCES `tbl_centroautorizado` (`id`) ON DELETE SET NULL ON UPDATE CASCADE');
+                else Tools::log()->error('Ya existe la llave foranea clientes <-> centroautorizado');
+            else Tools::log()->error('No existe la tabla tbl_centroautorizado');
+        }
+
+        //var_dump($foreing_keys[7]);
     }
 
     public function uninstall(): void
