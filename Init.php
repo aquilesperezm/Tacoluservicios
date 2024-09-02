@@ -65,19 +65,14 @@ class Init extends InitClass
 
 
         //        var_dump($foreing_keys);
-
-        if (!$exist_column_idcentroautorizado) {
-            $db->exec('ALTER TABLE clientes ADD COLUMN id_centroautorizado INTEGER AFTER web; ');
-            if ($db->tableExists('tbl_centroautorizado'))
-                $db->exec('CONSTRAINT "clientes_fk1" FOREIGN KEY (`id_centroautorizado`) REFERENCES `tbl_centroautorizado` (`id`) ON DELETE SET NULL ON UPDATE CASCADE');
-            else Tools::log()->error('No existe la tabla tbl_centroautorizado');
-        } else {
-            if ($db->tableExists('tbl_centroautorizado'))
+        if ($db->tableExists('tbl_centroautorizado')) {
+            if (!$exist_column_idcentroautorizado) {
+                $db->exec('ALTER TABLE clientes ADD COLUMN id_centroautorizado INTEGER AFTER web; ');
                 if (!$exist_fk_clientes_centroautorizado)
                     $db->exec('ALTER TABLE clientes ADD CONSTRAINT `clientes_fk1` FOREIGN KEY (`id_centroautorizado`) REFERENCES `tbl_centroautorizado` (`id`) ON DELETE SET NULL ON UPDATE CASCADE');
                 else Tools::log()->error('Ya existe la llave foranea clientes <-> centroautorizado');
-            else Tools::log()->error('No existe la tabla tbl_centroautorizado');
-        }
+            }
+        } else Tools::log()->error('No existe la tabla tbl_centroautorizado');
 
         //var_dump($foreing_keys[7]);
     }
