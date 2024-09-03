@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>comentario</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>escala_velocidad</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>fecha_fabricacion</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>fecha_fin_garantia</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>fecha_instalacion</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>fecha_ultima_revision</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>homologacion</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idcategoria</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idmodelo</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>no_serie</name>
+        <type>character varying(150)</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>tbl_tacografo_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+     <constraint>
+        <name>fk_tbl_modelo_tacografo_1</name>
+        <type>FOREIGN KEY (idmodelo) REFERENCES tbl_modelo_tacografo (id) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>fk_tbl_modelo_tacografo_2</name>
+        <type>FOREIGN KEY (idcategoria) REFERENCES tbl_categoria_tacografo (id) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

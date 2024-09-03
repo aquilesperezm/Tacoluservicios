@@ -10,7 +10,17 @@ use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Plugins;
 
 use FacturaScripts\Plugins\Tacoluservicios\Model\CentroAutorizado;
+use FacturaScripts\Plugins\Tacoluservicios\Model\ModeloTacografo;
+use FacturaScripts\Plugins\Tacoluservicios\Model\ModeloVehiculo;
+use FacturaScripts\Plugins\Tacoluservicios\Model\MarcaVehiculo;
+use FacturaScripts\Plugins\Tacoluservicios\Model\Vehiculo;
+use FacturaScripts\Plugins\Tacoluservicios\Model\CategoriaTacografo;
+use FacturaScripts\Plugins\Tacoluservicios\Model\Tacografo;
 
+use FacturaScripts\Plugins\Tacoluservicios\Model\OrdenTrabajo;
+
+use FacturaScripts\Plugins\Tacoluservicios\Model\TipoIntervencionXOrdenTrabajo;
+use FacturaScripts\Plugins\Tacoluservicios\Model\TipoIntervencion;
 
 /**
  * Los plugins pueden contener un archivo Init.php en el que se definen procesos a ejecutar
@@ -26,39 +36,20 @@ class Init extends InitClass
 
         //verificar si tiene la estructura creada
         $db = new DataBase();
-        //if (!$db->tableExists('tbl_modelo_vehiculo')) throw new KernelException('AccessDenied', 'test');
-
-       /* if (
-
-            !$db->tableExists('tbl_rel_tipointervencion_x_orden_trabajo')
-            && !$db->tableExists('tbl_tipointervencion')
-            //vehiculo
-            && !$db->tableExists('tbl_marca_vehiculo')
-            && !$db->tableExists('tbl_modelo_vehiculo')
-            && !$db->tableExists('tbl_vehiculo')
-
-            && !$db->tableExists('tbl_cliente')
-            && !$db->tableExists('tbl_centroautorizado')
-            //tacografo
-            && !$db->tableExists('tbl_tacografo')
-            && !$db->tableExists('tbl_categoria_tacografo')
-            && !$db->tableExists('tbl_modelo_tacografo')
-        ) {
-
-            $centro_autorizado = new CentroAutorizado();
-
-            //  Tools::log()->error('<b>Error:</b> la base de datos no esta sincronizada para el plugin <b style="color:blue">TACOLUSERVICIOS</b>, por favor presione <b>Reconstruir</b>');
-        }*/
-
-
+               
         $centro_autorizado = new CentroAutorizado();
+        $tipointervencion = new TipoIntervencion();    
+        $categoria_tacografo = new CategoriaTacografo();
+        $marca_vehiculo = new MarcaVehiculo();
+        $modelo_tacografo = new ModeloTacografo();
+        $modelo_vehiculo = new ModeloVehiculo();
 
-        // echo($db->getTables()[0]->COL_LENGTH);
-        // var_dump($result);
-        // $exists = (mysql_num_rows($result))?TRUE:FALSE;
-
-
-
+        
+        $tacografo = new Tacografo();
+        $vehiculo = new Vehiculo();
+        $orden = new OrdenTrabajo();
+        $tipointervencion_x_ordentrabajo = new TipoIntervencionXOrdenTrabajo();
+       
         $result = $db->getColumns('clientes');
         $foreing_keys = $db->getConstraints('clientes');
 
@@ -72,24 +63,22 @@ class Init extends InitClass
             }
         }
 
-        //        var_dump($foreing_keys);
         if ($db->tableExists('tbl_centroautorizado')) {
             if (!$exist_column_idcentroautorizado) {
                 $db->exec('ALTER TABLE clientes ADD COLUMN id_centroautorizado INTEGER AFTER web; ');
                 if (!$exist_fk_clientes_centroautorizado)
                     $db->exec('ALTER TABLE clientes ADD CONSTRAINT `clientes_fk1` FOREIGN KEY (`id_centroautorizado`) REFERENCES `tbl_centroautorizado` (`id`) ON DELETE SET NULL ON UPDATE CASCADE');
-                else Tools::log()->error('Ya existe la llave foranea clientes <-> centroautorizado');
+                //else Tools::log()->error('Ya existe la llave foranea clientes <-> centroautorizado');
             } else {
                 if (!$exist_fk_clientes_centroautorizado)
                     $db->exec('ALTER TABLE clientes ADD CONSTRAINT `clientes_fk1` FOREIGN KEY (`id_centroautorizado`) REFERENCES `tbl_centroautorizado` (`id`) ON DELETE SET NULL ON UPDATE CASCADE');
-                else Tools::log()->error('Ya existe la llave foranea clientes <-> centroautorizado');
+               // else Tools::log()->error('Ya existe la llave foranea clientes <-> centroautorizado');
             }
         } else {
             $hero = new CentroAutorizado();
             Tools::log()->error('No existe la tabla tbl_centroautorizado');
         }
-
-        //var_dump($foreing_keys[7]);
+    
     }
 
     public function uninstall(): void
