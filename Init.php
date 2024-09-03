@@ -74,10 +74,10 @@ class Init extends InitClass
                     $db->exec('ALTER TABLE clientes ADD CONSTRAINT `clientes_fk1` FOREIGN KEY (`id_centroautorizado`) REFERENCES `tbl_centroautorizado` (`id`) ON DELETE SET NULL ON UPDATE CASCADE');
                // else Tools::log()->error('Ya existe la llave foranea clientes <-> centroautorizado');
             }
-        } else {
+        } /*else {
             $hero = new CentroAutorizado();
-            Tools::log()->error('No existe la tabla tbl_centroautorizado');
-        }
+            //Tools::log()->error('No existe la tabla tbl_centroautorizado');
+        }*/
     
     }
 

@@ -21,6 +21,10 @@
   padding-top: 7px;
 }
 
+a:hover {
+  text-decoration: none !important;
+}
+
 .tbar-add:before {
   font: 18px/1 "Font Awesome 6 Free";
   color: #18d828;
