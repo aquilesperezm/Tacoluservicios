@@ -5,15 +5,92 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
   models: [],
   stores: [],
 
-  control:{
-    'grid-cliente > toolbar[dock="top"] > button:first ':{
-        click: 'onClick_AdicionarCliente'
-    }
+  control: {
+    'grid-cliente > toolbar[dock="top"] > button:first ': {
+      click: "onClick_AdicionarCliente",
+    },
   },
- 
+
   onClick_AdicionarCliente: (btn, e) => {
-    console.log("Cliente");
-    // this.callParent();
+    Ext.create("Ext.window.Window", {
+      title: "Add Cliente",
+      width: 700,
+      height: 700,
+      modal: true,
+      items: [
+        {
+          xtype: "form",
+          items: [
+            {
+              xtype: "container",
+              layout: "hbox",
+
+              defaults: {
+                padding: 20,
+              },
+              items: [
+                {
+                  xtype: "textfield",
+                  fieldLabel: "Código",
+                },
+                {
+                  xtype: "textfield",
+                  fieldLabel: "Nombre",
+                },
+              ],
+            },{
+              xtype: "container",
+              layout: "hbox",
+
+              defaults: {
+                padding: 20,
+              },
+              items: [
+                {
+                  xtype: "textfield",
+                  fieldLabel: "Número Fiscal",
+                },
+                {
+                  xtype: "textfield",
+                  fieldLabel: "Email",
+                },
+              ],
+            },{
+              xtype: "container",
+              layout: "hbox",
+
+              defaults: {
+                padding: 20,
+              },
+              items: [
+                {
+                  xtype: "textfield",
+                  fieldLabel: "Teléfono",
+                },
+                {
+                  xtype: "combobox",
+                  fieldLabel: "Centro Autorizado",
+                },
+              ],
+            },{
+              xtype: "container",
+              layout: "hbox",
+
+              defaults: {
+                padding: 20,
+              },
+              items: [
+                {
+                  xtype: "textarea",
+                  fieldLabel: "Observaciones",
+                  width:600,
+                }
+              ],
+            }
+          ],
+        },
+      ],
+    }).show();
   },
 
   init: (app) => {},
