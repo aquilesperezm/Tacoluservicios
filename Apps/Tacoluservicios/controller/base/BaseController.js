@@ -26,7 +26,7 @@ Ext.define("TCSRV.controller.base.BaseController", {
       store.getProxy().setConfig({
         extraParams: {
           action: "search",
-          query: cmp.getValue(),
+          query: query_str,
         },
       });
       store.load();
