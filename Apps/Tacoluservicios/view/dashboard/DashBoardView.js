@@ -22,13 +22,13 @@ Ext.define("TCSRV.view.dashboard.DashBoardView", {
               padding: 2,
             },
             items: [
-              {
-                text: "Clientes",
-
-                // width:150
-              },
+              
               {
                 text: "Centros Autorizados",
+
+                // width:150
+              },{
+                text: "Clientes",
 
                 // width:150
               },
@@ -81,7 +81,7 @@ Ext.define("TCSRV.view.dashboard.DashBoardView", {
         { xtype: "button", text: "Ordenes de Trabajo", padding: 5 },
       ],
       items: [{
-        xtype:'grid-cliente'
+        xtype:'centroautorizado-grid'
       }],
     },
   ],

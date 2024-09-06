@@ -22,6 +22,9 @@ use FacturaScripts\Plugins\Tacoluservicios\Model\OrdenTrabajo;
 use FacturaScripts\Plugins\Tacoluservicios\Model\TipoIntervencionXOrdenTrabajo;
 use FacturaScripts\Plugins\Tacoluservicios\Model\TipoIntervencion;
 
+use FacturaScripts\Core\Controller\ApiRoot;
+use FacturaScripts\Core\Kernel;
+
 /**
  * Los plugins pueden contener un archivo Init.php en el que se definen procesos a ejecutar
  * cada vez que carga FacturaScripts o cuando se instala o actualiza el plugin.
@@ -78,6 +81,12 @@ class Init extends InitClass
             $hero = new CentroAutorizado();
             //Tools::log()->error('No existe la tabla tbl_centroautorizado');
         }*/
+
+
+        //Register API 
+
+        Kernel::addRoute('/api/3/centroautorizado_manager', 'CentroAutorizadoManager', -1);
+        ApiRoot::addCustomResource('centroautorizado_manager');
     
     }
 

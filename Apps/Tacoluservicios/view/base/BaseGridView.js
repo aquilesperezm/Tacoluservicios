@@ -4,15 +4,16 @@ Ext.define("TCSRV.view.base.BaseGridView", {
   padding: 20,
   border: 1,
   title: "Base Grid",
-  height: Math.max(
-    document.body.scrollHeight,
-    document.body.offsetHeight,
-    document.documentElement.clientHeight,
-    document.documentElement.scrollHeight,
-    document.documentElement.offsetHeight
-  )- 150,
+  height:
+    Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.clientHeight,
+      document.documentElement.scrollHeight,
+      document.documentElement.offsetHeight
+    ) - 150,
   columnLines: true,
-  
+
   plugins: {
     rowediting: {
       clicksToMoveEditor: 1,
@@ -23,7 +24,7 @@ Ext.define("TCSRV.view.base.BaseGridView", {
     type: "checkboxmodel",
     checkOnly: false,
   },
-  
+
   tbar: [
     {
       text: "Adicionar",
@@ -46,6 +47,7 @@ Ext.define("TCSRV.view.base.BaseGridView", {
       fieldLabel: "Buscar",
       labelWidth: 50,
       width: 400,
+      enableKeyEvents: true,
     },
   ],
 
@@ -63,7 +65,7 @@ Ext.define("TCSRV.view.base.BaseGridView", {
         labelWidth: 90,
         width: 165,
         value: 50,
-        minValue:15,
+        minValue: 15,
       },
     ],
   },

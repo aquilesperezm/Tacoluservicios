@@ -15,8 +15,10 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
     Ext.create("Ext.window.Window", {
       title: "Add Cliente",
       width: 700,
-      height: 700,
+      height: 400,
       modal: true,
+      resizable:false,
+      draggable:false,
       items: [
         {
           xtype: "form",
@@ -38,7 +40,8 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
                   fieldLabel: "Nombre",
                 },
               ],
-            },{
+            },
+            {
               xtype: "container",
               layout: "hbox",
 
@@ -55,7 +58,8 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
                   fieldLabel: "Email",
                 },
               ],
-            },{
+            },
+            {
               xtype: "container",
               layout: "hbox",
 
@@ -72,7 +76,8 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
                   fieldLabel: "Centro Autorizado",
                 },
               ],
-            },{
+            },
+            {
               xtype: "container",
               layout: "hbox",
 
@@ -83,11 +88,17 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
                 {
                   xtype: "textarea",
                   fieldLabel: "Observaciones",
-                  width:600,
-                }
+                  width: 600,
+                },
               ],
-            }
+            },
           ],
+        },
+      ],
+
+      buttons: [
+        {
+          text: "Guardar",
         },
       ],
     }).show();

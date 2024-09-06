@@ -5,6 +5,8 @@ Ext.application({
   controllers: ['dashboard.DashBoardController'
      ,'base.BaseController'
     ,'cliente.ClienteController'
+    ,'centroautorizado.CentroAutorizadoController'
+    
   ],
 
   launch: () => {
