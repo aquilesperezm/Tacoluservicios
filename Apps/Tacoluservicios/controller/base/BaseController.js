@@ -14,7 +14,7 @@ Ext.define("TCSRV.controller.base.BaseController", {
     'grid toolbar[dock="top"] textfield[fieldLabel="Buscar"]': {
       keyup: "onEnterTextSearching",
       specialkey: "onEnterTextSearching",
-    },
+    }
   },
 
   onEnterTextSearching: (cmp, e) => {

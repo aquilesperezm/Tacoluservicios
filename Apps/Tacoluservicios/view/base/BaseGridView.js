@@ -31,15 +31,16 @@ Ext.define("TCSRV.view.base.BaseGridView", {
     },
     "-",
     {
-      text: "Eliminar",
+      text: "Eliminar"
     },
     "-",
     {
-      text: "Detalles",
+      text: "Detalles"
+
     },
     "-",
     {
-      text: "Imprimir",
+      text: "Imprimir"
     },
     "-",
     {
