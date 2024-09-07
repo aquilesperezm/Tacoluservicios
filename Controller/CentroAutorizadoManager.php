@@ -66,6 +66,20 @@ class CentroAutorizadoManager extends ApiController
             //create
             if ($_POST['action'] == 'create') {
 
+                $codigo = $_POST['codigo'];
+                $nombre = $_POST['nombre'];
+
+                $d = new CentroAutorizado();
+              
+                $d->codigo = $codigo;
+                $d->nombre = $nombre;
+
+                $d->save();
+
+                $resp_data = ["success" => 'true', "action" => 'create'];
+                $this->response->setStatusCode(200);
+                $this->response->setContent(json_encode($resp_data));
+
                 //update
             } else if ($_POST['action'] == 'update') {
 

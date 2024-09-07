@@ -25,6 +25,9 @@ Ext.define("TCSRV.controller.centroautorizado.CentroAutorizadoController", {
     "centroautorizado-grid": {
       edit: "onRowEditCentroAutorizado",
     },
+    "#CreateNew_CentroAutorizado": {
+      click: "onClickGuardarNewCentroAutorizado",
+    },
   },
 
   onClickButtonAdicionar: (btn, e) => {
@@ -41,9 +44,28 @@ Ext.define("TCSRV.controller.centroautorizado.CentroAutorizadoController", {
       buttons: [
         {
           text: "Guardar",
+          id: "CreateNew_CentroAutorizado",
         },
       ],
     }).show();
+  },
+
+  onClickGuardarNewCentroAutorizado: (btn, e) => {
+    let window = btn.up("window");
+    let form_panel = window.down("form");
+    
+    form_panel.getForm().submit({
+      clientValidation: true,
+      headers: { Token: "Tacoluservicios2024**" },
+      params: {
+        action: "create",
+      },
+      success: function (form, action) {
+        window.close();
+        Ext.StoreManager.lookup('centroautorizado.CentroAutorizadoStore').load();
+      },
+      failure: function (form, action) {},
+    });
   },
 
   // url: "api/3/get_vehiculos",
@@ -53,9 +75,9 @@ Ext.define("TCSRV.controller.centroautorizado.CentroAutorizadoController", {
     let selection = grid_sm.getSelection();
 
     let ids = [];
-    selection.forEach((e,i,a)=>{
-      ids.push(e.data.id)
-    })
+    selection.forEach((e, i, a) => {
+      ids.push(e.data.id);
+    });
 
     if (selection.length > 0) {
       Ext.Msg.show({
