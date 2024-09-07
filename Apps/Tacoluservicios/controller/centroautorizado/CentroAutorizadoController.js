@@ -52,6 +52,11 @@ Ext.define("TCSRV.controller.centroautorizado.CentroAutorizadoController", {
     let grid_sm = grid.getSelectionModel();
     let selection = grid_sm.getSelection();
 
+    let ids = [];
+    selection.forEach((e,i,a)=>{
+      ids.push(e.data.id)
+    })
+
     if (selection.length > 0) {
       Ext.Msg.show({
         title: "Eliminar Centros Autorizados",
@@ -61,9 +66,25 @@ Ext.define("TCSRV.controller.centroautorizado.CentroAutorizadoController", {
         icon: Ext.Msg.WARNING,
         fn: function (btn) {
           if (btn === "yes") {
-            console.log("Yes pressed");
+            //proceed to delete
+
+            let store = grid.getStore();
+
+            Ext.Ajax.request({
+              method: "POST",
+              headers: { Token: "Tacoluservicios2024**" },
+              url: "api/3/centroautorizado_manager",
+              params: {
+                action: "delete",
+                records_ids_delete: Ext.encode(ids),
+              },
+              success: (response) => {
+                store.load();
+              },
+              failure: (response) => {},
+            });
           } else if (btn === "no") {
-            console.log("No pressed");
+            grid.getStore().load();
           }
         },
       });

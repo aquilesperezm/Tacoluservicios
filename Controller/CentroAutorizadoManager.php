@@ -63,12 +63,13 @@ class CentroAutorizadoManager extends ApiController
             }
         } else if ($this->request->isMethod('POST')) {
 
+            //create
             if ($_POST['action'] == 'create') {
+
+                //update
             } else if ($_POST['action'] == 'update') {
 
                 $record = json_decode($_POST['record_updated']);
-
-                var_dump($record);
 
                 $d = new CentroAutorizado();
                 $d = $d->get($record->id);
@@ -80,7 +81,21 @@ class CentroAutorizadoManager extends ApiController
                 $resp_data = ["success" => 'true', "action" => 'update'];
                 $this->response->setStatusCode(200);
                 $this->response->setContent(json_encode($resp_data));
+
+                //delete 
             } else if ($_POST['action'] == 'delete') {
+
+                $d = new CentroAutorizado();
+                $record_ids = json_decode($_POST['records_ids_delete']);
+
+                foreach($record_ids as $id){
+                   $d = $d->get($id);
+                   $d->delete();     
+                }
+
+                $resp_data = ["success" => 'true', "action" => 'delete'];
+                $this->response->setStatusCode(200);
+                $this->response->setContent(json_encode($resp_data));
             }
         }
     }
