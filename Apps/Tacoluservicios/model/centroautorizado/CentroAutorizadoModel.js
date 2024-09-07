@@ -3,6 +3,6 @@ Ext.define("TCSRV.model.centroautorizado.CentroAutorizadoModel", {
   fields: [
     { name: "id", type: "int" },
     { name: "codigo", type: "string" },
-    { name: "nombre", type: "string" }
+    { name: "nombre", type: "string" },
   ],
 });

@@ -21,6 +21,10 @@ Ext.define("TCSRV.controller.centroautorizado.CentroAutorizadoController", {
     'centroautorizado-grid toolbar[dock="top"] button[text="Detalles"]': {
       click: "onClickButtonDetalles",
     },
+    //cuando se actualiza una fila
+    "centroautorizado-grid": {
+      edit: "onRowEditCentroAutorizado",
+    },
   },
 
   onClickButtonAdicionar: (btn, e) => {
@@ -73,37 +77,37 @@ Ext.define("TCSRV.controller.centroautorizado.CentroAutorizadoController", {
     }
   },
 
-  onClickButtonDetalles: (btn,e)=>{
-
+  onClickButtonDetalles: (btn, e) => {
     let grid = btn.up("centroautorizado-grid", 2);
     let grid_sm = grid.getSelectionModel();
     let selection = grid_sm.getSelection();
 
     if (selection.length == 1) {
-
-      Ext.create('Ext.window.Window',{
-        modal:true,
-        title:'Detalles',
-        items:[{
-          xtype:'form',
-          defaults:{
-            padding:20
+      Ext.create("Ext.window.Window", {
+        modal: true,
+        title: "Detalles",
+        items: [
+          {
+            xtype: "form",
+            defaults: {
+              padding: 20,
+            },
+            items: [
+              {
+                xtype: "displayfield",
+                fieldLabel: "Código",
+                value: selection[0].data.codigo,
+              },
+              {
+                xtype: "displayfield",
+                fieldLabel: "Nombre",
+                value: selection[0].data.nombre,
+              },
+            ],
           },
-          items:[{
-            xtype:'displayfield',
-            fieldLabel:'Código',
-            value:selection[0].data.codigo
-          },{
-            xtype:'displayfield',
-            fieldLabel:'Nombre',
-            value:selection[0].data.nombre
-          }]
-        }]
-
+        ],
       }).show();
-
-
-    }else {
+    } else {
       Ext.Msg.show({
         title: "Error",
         message: "Debe seleccionar un único Centro Autorizado",
@@ -111,7 +115,25 @@ Ext.define("TCSRV.controller.centroautorizado.CentroAutorizadoController", {
         icon: Ext.Msg.ERROR,
       });
     }
+  },
 
+  onRowEditCentroAutorizado: (editor, context) => {
+    let grid = context.grid;
+    let store = grid.getStore();
+
+    Ext.Ajax.request({
+      method: "POST",
+      headers: { Token: "Tacoluservicios2024**" },
+      url: "api/3/centroautorizado_manager",
+      params: {
+        action: "update",
+        record_updated: Ext.encode(context.record.data),
+      },
+      success: (response) => {
+        store.load();
+      },
+      failure: (response) => {},
+    });
   },
 
   init: (app) => {},
