@@ -39,20 +39,20 @@ class Init extends InitClass
 
         //verificar si tiene la estructura creada
         $db = new DataBase();
-               
+
         $centro_autorizado = new CentroAutorizado();
-        $tipointervencion = new TipoIntervencion();    
+        $tipointervencion = new TipoIntervencion();
         $categoria_tacografo = new CategoriaTacografo();
         $marca_vehiculo = new MarcaVehiculo();
         $modelo_tacografo = new ModeloTacografo();
         $modelo_vehiculo = new ModeloVehiculo();
 
-        
+
         $tacografo = new Tacografo();
         $vehiculo = new Vehiculo();
         $orden = new OrdenTrabajo();
         $tipointervencion_x_ordentrabajo = new TipoIntervencionXOrdenTrabajo();
-       
+
         $result = $db->getColumns('clientes');
         $foreing_keys = $db->getConstraints('clientes');
 
@@ -75,7 +75,7 @@ class Init extends InitClass
             } else {
                 if (!$exist_fk_clientes_centroautorizado)
                     $db->exec('ALTER TABLE clientes ADD CONSTRAINT `clientes_fk1` FOREIGN KEY (`id_centroautorizado`) REFERENCES `tbl_centroautorizado` (`id`) ON DELETE SET NULL ON UPDATE CASCADE');
-               // else Tools::log()->error('Ya existe la llave foranea clientes <-> centroautorizado');
+                // else Tools::log()->error('Ya existe la llave foranea clientes <-> centroautorizado');
             }
         } /*else {
             $hero = new CentroAutorizado();
@@ -83,11 +83,24 @@ class Init extends InitClass
         }*/
 
 
-        //Register API 
+        $fecha = date('Y-m-d');
 
+        $verify_api_exists = $db->select("SELECT nick FROM api_keys WHERE nick='plugin_tacoluservicios'");
+        $verify_api_isenabled = $db->select("SELECT properties FROM settings");
+     
+        $settings = json_decode($verify_api_isenabled[0]['properties']);
+        $settings->enable_api = true;
+        
+        $db->exec("UPDATE `settings` SET `properties` ='".json_encode($settings)."'");
+
+        if(count($verify_api_exists)==0)
+        $db->exec("INSERT INTO `api_keys`(`nick`,`apikey`,`creationdate`,`description`,`enabled`,`fullaccess`) 
+            VALUES('plugin_tacoluservicios', 'Tacoluservicios2024**','$fecha','API para el plugin TacoluServicios', true, true)");
+
+
+        //Register API 
         Kernel::addRoute('/api/3/centroautorizado_manager', 'CentroAutorizadoManager', -1);
         ApiRoot::addCustomResource('centroautorizado_manager');
-    
     }
 
     public function uninstall(): void
