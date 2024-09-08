@@ -89,10 +89,11 @@ class Init extends InitClass
         $verify_api_isenabled = $db->select("SELECT properties FROM settings");
      
         $settings = json_decode($verify_api_isenabled[0]['properties']);
+        //Enabling API Engine
         $settings->enable_api = true;
-        
         $db->exec("UPDATE `settings` SET `properties` ='".json_encode($settings)."'");
 
+        // Create APy Key Access
         if(count($verify_api_exists)==0)
         $db->exec("INSERT INTO `api_keys`(`nick`,`apikey`,`creationdate`,`description`,`enabled`,`fullaccess`) 
             VALUES('plugin_tacoluservicios', 'Tacoluservicios2024**','$fecha','API para el plugin TacoluServicios', true, true)");
