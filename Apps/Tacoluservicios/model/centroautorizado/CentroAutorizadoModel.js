@@ -5,4 +5,6 @@ Ext.define("TCSRV.model.centroautorizado.CentroAutorizadoModel", {
     { name: "codigo", type: "string" },
     { name: "nombre", type: "string" },
   ],
+
+  idProperty: "id",
 });

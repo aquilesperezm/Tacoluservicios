@@ -9,6 +9,12 @@ Ext.define("TCSRV.controller.centroautorizado.CentroAutorizadoController", {
   stores: ["centroautorizado.CentroAutorizadoStore"],
 
   control: {
+    'centroautorizado-grid toolbar[dock="top"] textfield[fieldLabel="Buscar"]': {
+      beforerender: (cmp) => {
+        cmp.setConfig('emptyText','Código, Nombre');
+      },
+    },
+
     //click en el boton Adicionar
     'centroautorizado-grid toolbar[dock="top"] button[text="Adicionar"]': {
       click: "onClickButtonAdicionar",
@@ -53,19 +59,23 @@ Ext.define("TCSRV.controller.centroautorizado.CentroAutorizadoController", {
   onClickGuardarNewCentroAutorizado: (btn, e) => {
     let window = btn.up("window");
     let form_panel = window.down("form");
-    
-    form_panel.getForm().submit({
-      clientValidation: true,
-      headers: { Token: "Tacoluservicios2024**" },
-      params: {
-        action: "create",
-      },
-      success: function (form, action) {
-        window.close();
-        Ext.StoreManager.lookup('centroautorizado.CentroAutorizadoStore').load();
-      },
-      failure: function (form, action) {},
-    });
+
+    if (form_panel.getForm().isValid()) {
+      form_panel.getForm().submit({
+        clientValidation: true,
+        headers: { Token: "Tacoluservicios2024**" },
+        params: {
+          action: "create",
+        },
+        success: function (form, action) {
+          window.close();
+          Ext.StoreManager.lookup(
+            "centroautorizado.CentroAutorizadoStore"
+          ).load();
+        },
+        failure: function (form, action) {},
+      });
+    } else Ext.Msg.alert("Error de Validación","Los campos deben ser válidos");
   },
 
   // url: "api/3/get_vehiculos",

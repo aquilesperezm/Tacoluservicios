@@ -1,39 +1,15 @@
 Ext.define("TCSRV.view.cliente.ClienteView", {
   extend: "TCSRV.view.base.BaseGridView",
-  xtype: "grid-cliente",
+  xtype: "cliente-grid",
   title: "Clientes",
-  store: Ext.create("Ext.data.Store", {
-    fields: ["name", "email", "phone"],
-    data: [
-      {
-        name: "Lisa",
-        email: "lisa@simpsons.com",
-        phone: "555-111-1224",
-      },
-      {
-        name: "Bart",
-        email: "bart@simpsons.com",
-        phone: "555-222-1234",
-      },
-      {
-        name: "Homer",
-        email: "homer@simpsons.com",
-        phone: "555-222-1244",
-      },
-      {
-        name: "Marge",
-        email: "marge@simpsons.com",
-        phone: "555-222-1254",
-      },
-    ],
-  }),
+  store: "cliente.ClienteStore",
   columns: [
     {
       xtype: "rownumberer",
     },
     {
-      text: "Código",
-      dataIndex: "name",
+      text: "Nombre",
+      dataIndex: "nombre",
       flex: 1,
       editor: {
         xtype: "textfield",
@@ -41,7 +17,7 @@ Ext.define("TCSRV.view.cliente.ClienteView", {
       },
     },
     {
-      text: "Nombre",
+      text: "Correo Electrónico",
       dataIndex: "email",
       flex: 1,
       editor: {
@@ -51,16 +27,7 @@ Ext.define("TCSRV.view.cliente.ClienteView", {
     },
     {
       text: "Número Fiscal",
-      dataIndex: "phone",
-      flex: 1,
-      editor: {
-        xtype: "textfield",
-        allowBlank: false,
-      },
-    },
-    {
-      text: "Email",
-      dataIndex: "phone",
+      dataIndex: "cifnif",
       flex: 1,
       editor: {
         xtype: "textfield",
@@ -69,7 +36,7 @@ Ext.define("TCSRV.view.cliente.ClienteView", {
     },
     {
       text: "Teléfono",
-      dataIndex: "phone",
+      dataIndex: "telefono1",
       flex: 1,
       editor: {
         xtype: "textfield",
@@ -78,20 +45,19 @@ Ext.define("TCSRV.view.cliente.ClienteView", {
     },
     {
       text: "Centro Autorizado",
-      dataIndex: "phone",
+      dataIndex: "nombre_centroautorizado",
       flex: 1,
       editor: {
-        xtype: "textfield",
+        xtype: "combobox",
         allowBlank: false,
       },
     },
     {
       text: "Observaciones",
-      dataIndex: "phone",
+      dataIndex: "observaciones",
       flex: 1,
       editor: {
         xtype: "textfield",
-        allowBlank: false,
       },
     },
   ]

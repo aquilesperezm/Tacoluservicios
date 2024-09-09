@@ -100,8 +100,13 @@ class Init extends InitClass
 
 
         //Register API 
+        //Centro Autorizado
         Kernel::addRoute('/api/3/centroautorizado_manager', 'CentroAutorizadoManager', -1);
         ApiRoot::addCustomResource('centroautorizado_manager');
+
+        //Cliente
+        Kernel::addRoute('/api/3/cliente_manager', 'ClienteManager', -1);
+        ApiRoot::addCustomResource('cliente_manager');
     }
 
     public function uninstall(): void

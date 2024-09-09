@@ -17,6 +17,12 @@ Ext.define("TCSRV.view.centroautorizado.forms.CentroAutorizadoForm", {
       fieldLabel: "Código",
       allowBlank: false,
       name: "codigo",
+      listeners:{
+        render: (cmp)=>{
+          cmp.focus();
+
+        }
+      }
     },
     {
       xtype: "textfield",

@@ -81,7 +81,7 @@ Ext.define("TCSRV.view.dashboard.DashBoardView", {
         { xtype: "button", text: "Ordenes de Trabajo", padding: 5 },
       ],
       items: [{
-        xtype:'centroautorizado-grid'
+         xtype:'cliente-grid'
       }],
     },
   ],

@@ -1,108 +1,193 @@
 Ext.define("TCSRV.controller.cliente.ClienteController", {
-  extend: "TCSRV.controller.base.BaseController",
+  extend: "Ext.app.Controller",
 
-  views: ["cliente.ClienteView"],
-  models: [],
-  stores: [],
+  views: [
+    "cliente.ClienteView",
+    //"cliente.forms.clienteForm",
+    //"cliente.addons.clienteMsg",
+  ],
+  stores: ["cliente.ClienteStore"],
 
   control: {
-    'grid-cliente > toolbar[dock="top"] > button:first ': {
-      click: "onClick_AdicionarCliente",
+    'cliente-grid toolbar[dock="top"] textfield[fieldLabel="Buscar"]': {
+      beforerender: (cmp) => {
+        cmp.setConfig('emptyText','Nombre, Correo Electrónico, Número Fiscal, Teléfono, Centro Autorizado');
+      },
     },
-  },
 
-  onClick_AdicionarCliente: (btn, e) => {
+    /* //click en el boton Adicionar
+    'cliente-grid toolbar[dock="top"] button[text="Adicionar"]': {
+      click: "onClickButtonAdicionar",
+    },
+    //click en el boton Eliminar
+    'cliente-grid toolbar[dock="top"] button[text="Eliminar"]': {
+      click: "onClickButtonEliminar",
+    },
+    //click en el boton Detalles
+    'cliente-grid toolbar[dock="top"] button[text="Detalles"]': {
+      click: "onClickButtonDetalles",
+    },
+    //cuando se actualiza una fila
+    "cliente-grid": {
+      edit: "onRowEditcliente",
+    },
+    "#CreateNew_cliente": {
+      click: "onClickGuardarNewcliente",
+    },*/
+  },
+  /*
+  onClickButtonAdicionar: (btn, e) => {
     Ext.create("Ext.window.Window", {
-      title: "Add Cliente",
-      width: 700,
-      height: 400,
+      draggable: false,
+      resizable: false,
       modal: true,
-      resizable:false,
-      draggable:false,
+      title: "Adicionar un nuevo Centro Autorizado",
       items: [
         {
-          xtype: "form",
-          items: [
-            {
-              xtype: "container",
-              layout: "hbox",
-
-              defaults: {
-                padding: 20,
-              },
-              items: [
-                {
-                  xtype: "textfield",
-                  fieldLabel: "Código",
-                },
-                {
-                  xtype: "textfield",
-                  fieldLabel: "Nombre",
-                },
-              ],
-            },
-            {
-              xtype: "container",
-              layout: "hbox",
-
-              defaults: {
-                padding: 20,
-              },
-              items: [
-                {
-                  xtype: "textfield",
-                  fieldLabel: "Número Fiscal",
-                },
-                {
-                  xtype: "textfield",
-                  fieldLabel: "Email",
-                },
-              ],
-            },
-            {
-              xtype: "container",
-              layout: "hbox",
-
-              defaults: {
-                padding: 20,
-              },
-              items: [
-                {
-                  xtype: "textfield",
-                  fieldLabel: "Teléfono",
-                },
-                {
-                  xtype: "combobox",
-                  fieldLabel: "Centro Autorizado",
-                },
-              ],
-            },
-            {
-              xtype: "container",
-              layout: "hbox",
-
-              defaults: {
-                padding: 20,
-              },
-              items: [
-                {
-                  xtype: "textarea",
-                  fieldLabel: "Observaciones",
-                  width: 600,
-                },
-              ],
-            },
-          ],
+          xtype: "cliente-form",
         },
       ],
-
       buttons: [
         {
           text: "Guardar",
+          id: "CreateNew_cliente",
         },
       ],
     }).show();
   },
 
+  onClickGuardarNewcliente: (btn, e) => {
+    let window = btn.up("window");
+    let form_panel = window.down("form");
+
+    if (form_panel.getForm().isValid()) {
+      form_panel.getForm().submit({
+        clientValidation: true,
+        headers: { Token: "Tacoluservicios2024**" },
+        params: {
+          action: "create",
+        },
+        success: function (form, action) {
+          window.close();
+          Ext.StoreManager.lookup(
+            "cliente.clienteStore"
+          ).load();
+        },
+        failure: function (form, action) {},
+      });
+    } else Ext.Msg.alert("Error de Validación","Los campos deben ser válidos");
+  },
+
+  // url: "api/3/get_vehiculos",
+  onClickButtonEliminar: (btn, e) => {
+    let grid = btn.up("cliente-grid", 2);
+    let grid_sm = grid.getSelectionModel();
+    let selection = grid_sm.getSelection();
+
+    let ids = [];
+    selection.forEach((e, i, a) => {
+      ids.push(e.data.id);
+    });
+
+    if (selection.length > 0) {
+      Ext.Msg.show({
+        title: "Eliminar Centros Autorizados",
+        message:
+          "Usted desea eliminar los Centros Autorizados seleccionados, ¿Está segur@?",
+        buttons: Ext.Msg.YESNO,
+        icon: Ext.Msg.WARNING,
+        fn: function (btn) {
+          if (btn === "yes") {
+            //proceed to delete
+
+            let store = grid.getStore();
+
+            Ext.Ajax.request({
+              method: "POST",
+              headers: { Token: "Tacoluservicios2024**" },
+              url: "api/3/cliente_manager",
+              params: {
+                action: "delete",
+                records_ids_delete: Ext.encode(ids),
+              },
+              success: (response) => {
+                store.load();
+              },
+              failure: (response) => {},
+            });
+          } else if (btn === "no") {
+            grid.getStore().load();
+          }
+        },
+      });
+    } else {
+      Ext.Msg.show({
+        title: "Error",
+        message: "Debe seleccionar al menos un Centro Autorizado",
+        buttons: Ext.Msg.OK,
+        icon: Ext.Msg.ERROR,
+      });
+    }
+  },
+
+  onClickButtonDetalles: (btn, e) => {
+    let grid = btn.up("cliente-grid", 2);
+    let grid_sm = grid.getSelectionModel();
+    let selection = grid_sm.getSelection();
+
+    if (selection.length == 1) {
+      Ext.create("Ext.window.Window", {
+        modal: true,
+        title: "Detalles",
+        items: [
+          {
+            xtype: "form",
+            defaults: {
+              padding: 20,
+            },
+            items: [
+              {
+                xtype: "displayfield",
+                fieldLabel: "Código",
+                value: selection[0].data.codigo,
+              },
+              {
+                xtype: "displayfield",
+                fieldLabel: "Nombre",
+                value: selection[0].data.nombre,
+              },
+            ],
+          },
+        ],
+      }).show();
+    } else {
+      Ext.Msg.show({
+        title: "Error",
+        message: "Debe seleccionar un único Centro Autorizado",
+        buttons: Ext.Msg.OK,
+        icon: Ext.Msg.ERROR,
+      });
+    }
+  },
+
+  onRowEditcliente: (editor, context) => {
+    let grid = context.grid;
+    let store = grid.getStore();
+
+    Ext.Ajax.request({
+      method: "POST",
+      headers: { Token: "Tacoluservicios2024**" },
+      url: "api/3/cliente_manager",
+      params: {
+        action: "update",
+        record_updated: Ext.encode(context.record.data),
+      },
+      success: (response) => {
+        store.load();
+      },
+      failure: (response) => {},
+    });
+  },
+*/
   init: (app) => {},
 });

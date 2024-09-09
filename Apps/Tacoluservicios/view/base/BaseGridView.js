@@ -47,7 +47,7 @@ Ext.define("TCSRV.view.base.BaseGridView", {
       xtype: "textfield",
       fieldLabel: "Buscar",
       labelWidth: 50,
-      width: 400,
+      width: 600,
       enableKeyEvents: true,
     },
   ],
