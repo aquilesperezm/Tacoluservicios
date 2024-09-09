@@ -3,19 +3,23 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
 
   views: [
     "cliente.ClienteView",
-    //"cliente.forms.clienteForm",
-    //"cliente.addons.clienteMsg",
+    "cliente.forms.ClienteForm",
+    "cliente.addons.ClienteMsg",
+    "centroautorizado.addons.CentroAutorizadoComboBox",
   ],
   stores: ["cliente.ClienteStore"],
 
   control: {
     'cliente-grid toolbar[dock="top"] textfield[fieldLabel="Buscar"]': {
       beforerender: (cmp) => {
-        cmp.setConfig('emptyText','Nombre, Correo Electrónico, Número Fiscal, Teléfono, Centro Autorizado');
+        cmp.setConfig(
+          "emptyText",
+          "Nombre, Correo Electrónico, Número Fiscal, Teléfono, Centro Autorizado"
+        );
       },
     },
 
-    /* //click en el boton Adicionar
+    //click en el boton Adicionar
     'cliente-grid toolbar[dock="top"] button[text="Adicionar"]': {
       click: "onClickButtonAdicionar",
     },
@@ -33,15 +37,15 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
     },
     "#CreateNew_cliente": {
       click: "onClickGuardarNewcliente",
-    },*/
+    },
   },
-  /*
+
   onClickButtonAdicionar: (btn, e) => {
     Ext.create("Ext.window.Window", {
       draggable: false,
       resizable: false,
       modal: true,
-      title: "Adicionar un nuevo Centro Autorizado",
+      title: "Adicionar un nuevo Cliente",
       items: [
         {
           xtype: "cliente-form",
@@ -69,13 +73,11 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
         },
         success: function (form, action) {
           window.close();
-          Ext.StoreManager.lookup(
-            "cliente.clienteStore"
-          ).load();
+          Ext.StoreManager.lookup("cliente.clienteStore").load();
         },
         failure: function (form, action) {},
       });
-    } else Ext.Msg.alert("Error de Validación","Los campos deben ser válidos");
+    } else Ext.Msg.alert("Error de Validación", "Los campos deben ser válidos");
   },
 
   // url: "api/3/get_vehiculos",
@@ -91,9 +93,9 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
 
     if (selection.length > 0) {
       Ext.Msg.show({
-        title: "Eliminar Centros Autorizados",
+        title: "Eliminar Clientes",
         message:
-          "Usted desea eliminar los Centros Autorizados seleccionados, ¿Está segur@?",
+          "Usted desea eliminar los Clientes seleccionados, ¿Está segur@?",
         buttons: Ext.Msg.YESNO,
         icon: Ext.Msg.WARNING,
         fn: function (btn) {
@@ -123,7 +125,7 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
     } else {
       Ext.Msg.show({
         title: "Error",
-        message: "Debe seleccionar al menos un Centro Autorizado",
+        message: "Debe seleccionar al menos un Cliente",
         buttons: Ext.Msg.OK,
         icon: Ext.Msg.ERROR,
       });
@@ -163,7 +165,7 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
     } else {
       Ext.Msg.show({
         title: "Error",
-        message: "Debe seleccionar un único Centro Autorizado",
+        message: "Debe seleccionar un único Cliente",
         buttons: Ext.Msg.OK,
         icon: Ext.Msg.ERROR,
       });
@@ -188,6 +190,6 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
       failure: (response) => {},
     });
   },
-*/
+
   init: (app) => {},
 });
