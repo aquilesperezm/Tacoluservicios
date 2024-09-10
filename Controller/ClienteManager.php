@@ -5,7 +5,7 @@ namespace FacturaScripts\Plugins\Tacoluservicios\Controller;
 use FacturaScripts\Core\Template\ApiController;
 
 use FacturaScripts\Plugins\Tacoluservicios\Model\CentroAutorizado;
-use FacturaScripts\Core\Model\Cliente;
+use FacturaScripts\Plugins\Tacoluservicios\Model\CustomCliente;
 
 /**
  * Un controlador es básicamente una página o una opción del menú de FacturaScripts.
@@ -87,7 +87,7 @@ class ClienteManager extends ApiController
     {
 
         $centroautorizado_model = new CentroAutorizado();
-        $cliente_model = new Cliente();
+        $cliente_model = new CustomCliente();
 
         //----------------------------------------------- Method Get: Read and Search ------------------------------------------------
         if ($this->request->isMethod('GET')) {
@@ -155,15 +155,24 @@ class ClienteManager extends ApiController
                 // ------------------------------------------------- Create -------------------------------------------------------------
                 if ($_POST['action'] == 'create') {
 
-                    $codigo = $_POST['codigo'];
+                    $cifnif = $_POST['cifnif'];
                     $nombre = $_POST['nombre'];
+                    $email = $_POST['email'];
+                    $telefono1 = $_POST['telefono1'];
+                    $id_centroautorizado = $_POST['centroautorizado'];
+                    $observaciones = $_POST['observaciones'];
 
-                    $centroautorizado = new CentroAutorizado();
+                    $new_cliente = new CustomCliente();
+                    
+                    $new_cliente->cifnif = $cifnif;
+                    $new_cliente->nombre = $nombre;
+                    $new_cliente->email = $email;
+                    $new_cliente->telefono1 = $telefono1;
+                    $new_cliente->observaciones = $observaciones;
 
-                    $centroautorizado->codigo = $codigo;
-                    $centroautorizado->nombre = $nombre;
+                    $new_cliente->id_centroautorizado = $id_centroautorizado;
 
-                    $centroautorizado->save();
+                    $new_cliente->save();
 
                     $resp_data = ["success" => 'true', "action" => 'create'];
                     $this->response->setStatusCode(200);
@@ -172,14 +181,14 @@ class ClienteManager extends ApiController
                     //--------------------------------------------------- Update -------------------------------------------------------
                 } else if ($_POST['action'] == 'update') {
 
-                    $record = json_decode($_POST['record_updated']);
+                   /* $record = json_decode($_POST['record_updated']);
 
                     $centroautorizado = new CentroAutorizado();
                     $centroautorizado = $centroautorizado->get($record->id);
                     $centroautorizado->codigo = $record->codigo;
                     $centroautorizado->nombre = $record->nombre;
 
-                    $centroautorizado->save();
+                    $centroautorizado->save();*/
 
                     $resp_data = ["success" => 'true', "action" => 'update'];
                     $this->response->setStatusCode(200);
@@ -189,13 +198,13 @@ class ClienteManager extends ApiController
 
                     if ($_POST['action'] == 'delete') {
 
-                        $centroautorizado = new CentroAutorizado();
+                        /*$centroautorizado = new CentroAutorizado();
                         $record_ids = json_decode($_POST['records_ids_delete']);
 
                         foreach ($record_ids as $id) {
                             $centroautorizado = $centroautorizado->get($id);
                             $centroautorizado->delete();
-                        }
+                        }*/
 
                         $resp_data = ["success" => 'true', "action" => 'delete'];
                         $this->response->setStatusCode(200);

@@ -9,7 +9,11 @@ use FacturaScripts\Core\KernelException;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Plugins;
 
+
 use FacturaScripts\Plugins\Tacoluservicios\Model\CentroAutorizado;
+use FacturaScripts\Plugins\Tacoluservicios\Model\CustomCliente;
+
+
 use FacturaScripts\Plugins\Tacoluservicios\Model\ModeloTacografo;
 use FacturaScripts\Plugins\Tacoluservicios\Model\ModeloVehiculo;
 use FacturaScripts\Plugins\Tacoluservicios\Model\MarcaVehiculo;
@@ -18,6 +22,7 @@ use FacturaScripts\Plugins\Tacoluservicios\Model\CategoriaTacografo;
 use FacturaScripts\Plugins\Tacoluservicios\Model\Tacografo;
 
 use FacturaScripts\Plugins\Tacoluservicios\Model\OrdenTrabajo;
+
 
 use FacturaScripts\Plugins\Tacoluservicios\Model\TipoIntervencionXOrdenTrabajo;
 use FacturaScripts\Plugins\Tacoluservicios\Model\TipoIntervencion;
@@ -41,6 +46,8 @@ class Init extends InitClass
         $db = new DataBase();
 
         $centro_autorizado = new CentroAutorizado();
+        $custom_cliente = new CustomCliente();
+
         $tipointervencion = new TipoIntervencion();
         $categoria_tacografo = new CategoriaTacografo();
         $marca_vehiculo = new MarcaVehiculo();

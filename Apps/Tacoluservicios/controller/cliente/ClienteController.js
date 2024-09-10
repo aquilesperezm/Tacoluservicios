@@ -71,7 +71,7 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
         },
         success: function (form, action) {
           window.close();
-          Ext.StoreManager.lookup("cliente.clienteStore").load();
+          Ext.StoreManager.lookup("cliente.ClienteStore").load();
         },
         failure: function (form, action) {},
       });
