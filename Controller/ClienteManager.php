@@ -15,16 +15,69 @@ use FacturaScripts\Core\Model\Cliente;
 class ClienteManager extends ApiController
 {
 
-
-    private function updateData($clientes, $centroautorizado, $return_object = false)
+    /**
+     * Summary of updateData
+     *  Esta funcion hace un join con el modelo Centro Autorizado, puesto que hay una relacion de 1 a muchos 
+     *  un centro de autorizos tiene muchos clientes
+     * 
+     * @param object $clienteModel El modelo de Clientes en FacturaScripts
+     * @param object $centroautorizado El modelo de CentroAutorizado en FacturaScripts
+     * @param bool $return_object Un variable booleana para retornar un arreglo de arreglos o un arreglo de objetos (tipo cliente) 
+     * @return array Un arreglo de Clientes con la relacion de Centro Autorizado
+     */
+    private function updateData($clienteModel, $centroautorizadoModel, $return_object = false)
     {
+
+        $clientes = $clienteModel->all();
 
         $result = [];
 
         foreach ($clientes as $cliente) {
             $cliente = (array) $cliente;
-            $cliente['nombre_centroautorizado'] = $centroautorizado->get($cliente['id_centroautorizado'])->nombre;
+            if ($cliente['id_centroautorizado'])
+                $cliente['nombre_centroautorizado'] = $centroautorizadoModel->get($cliente['id_centroautorizado'])->nombre;
+            else $cliente['nombre_centroautorizado'] = Null;
             array_push($result, (!$return_object) ? $cliente : (object) $cliente);
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * Busca los clientes por codigo cifnif, nombre, email, telefono y centro de autorizo
+     * 
+     * @param array $clientes un arreglo de objetos que representa a los clientes
+     * @param string $query una cadena obtenida del clientes que representa una consulta a buscar
+     * @return array un arreglo de los objetos que coinciden con los campos de la busqueda
+     */
+    private function searchData($clientes, $query)
+    {
+
+        $result = [];
+
+        foreach ($clientes as $cliente) {
+
+            //codigo
+            if (str_contains(strtolower($cliente->cifnif), strtolower($query))) {
+                array_push($result, $cliente);
+            }
+            //nombre
+            else if (str_contains(strtolower($cliente->nombre), strtolower($query))) {
+                array_push($result, $cliente);
+            }
+            //email
+            else if (str_contains(strtolower($cliente->email), strtolower($query))) {
+                array_push($result, $cliente);
+            }
+            //telefono 1
+            else if (str_contains(strtolower($cliente->telefono1), strtolower($query))) {
+                array_push($result, $cliente);
+            }
+            //centro autorizado
+            else if (str_contains(strtolower($cliente->nombre_centroautorizado), strtolower($query))) {
+                array_push($result, $cliente);
+            } else continue;
         }
 
         return $result;
@@ -33,119 +86,121 @@ class ClienteManager extends ApiController
     protected function runResource(): void
     {
 
-        $centroautorizado = new CentroAutorizado();
-        $cliente_db = new Cliente();
+        $centroautorizado_model = new CentroAutorizado();
+        $cliente_model = new Cliente();
 
-        //read and search
+        //----------------------------------------------- Method Get: Read and Search ------------------------------------------------
         if ($this->request->isMethod('GET')) {
 
-            //read
+
+            //------------------------------------------------------------- Read ---------------------------------------------------
             if ($_GET['action'] == 'read') {
 
-                $start = $_GET['start'];
-                $limit = $_GET['limit'];
+                $query = isset($_GET['query']) ? $_GET['query'] : null;
 
-                $clientes = $cliente_db->all();
+                //-------------------------------------------------- Reading from grid -------------------------------------------------
+                if (!$query || $query == 'all') {
 
-                $result = $this->updateData($clientes, $centroautorizado);
+                    $start = $_GET['start'];
+                    $limit = $_GET['limit'];
 
-                $data = ["clientes" => array_slice($result, $start, $limit), "total" => count($clientes)];
-                $this->response->setStatusCode(200);
-                $this->response->setContent(json_encode($data));
-            }
-            if ($_GET['action'] == 'search') {
+                    $clientes_updated = $this->updateData($cliente_model, $centroautorizado_model);
 
-                $query = $_GET['query'];
-
-                $result = [];
-
-                $cliente_db = new Cliente();
-                $clientes = $cliente_db->all();
-
-                $clientes = $this->updateData($clientes, $centroautorizado, true);
-
-                foreach ($clientes as $cliente) {
-
-                    //codigo
-                    if (str_contains(strtolower($cliente->cifnif), strtolower($query))) {
-                        array_push($result, $cliente);
-                    }
-                    //nombre
-                    else if (str_contains(strtolower($cliente->nombre), strtolower($query))) {
-                        array_push($result, $cliente);
-                    } 
-                    //email
-                    else if (str_contains(strtolower($cliente->email), strtolower($query))) {
-                        array_push($result, $cliente);
-                    } 
-                    //telefono 1
-                    else if (str_contains(strtolower($cliente->telefono1), strtolower($query))) {
-                        array_push($result, $cliente);
-                    }
-                    //centro autorizado
-                    else if (str_contains(strtolower($cliente->nombre_centroautorizado), strtolower($query))) {
-                        array_push($result, $cliente);
-                    }
-                    else continue;
+                    $data = ["clientes" => array_slice($clientes_updated, $start, $limit), "total" => count($clientes_updated)];
+                    $this->response->setStatusCode(200);
+                    $this->response->setContent(json_encode($data));
                 }
 
-                $start = $_GET['start'];
-                $limit = $_GET['limit'];
+                //---------------------------------------- Reading and Search from combobox ---------------------------------------
+                else {
 
-                $resp_data = ["clientes" => array_slice($result, $start, $limit), "total" => count($clientes)];
-                $this->response->setStatusCode(200);
-                $this->response->setContent(json_encode($resp_data));
-            }
-        } else if ($this->request->isMethod('POST')) {
+                    $query = $_GET['query'];
 
-            //create
-            if ($_POST['action'] == 'create') {
+                    $clientes_updated = $this->updateData($cliente_model, $centroautorizado_model, true);
 
-                $codigo = $_POST['codigo'];
-                $nombre = $_POST['nombre'];
+                    $result = $this->searchData($clientes_updated, $query);
 
-                $centroautorizado = new CentroAutorizado();
+                    $start = $_GET['start'];
+                    $limit = $_GET['limit'];
 
-                $centroautorizado->codigo = $codigo;
-                $centroautorizado->nombre = $nombre;
-
-                $centroautorizado->save();
-
-                $resp_data = ["success" => 'true', "action" => 'create'];
-                $this->response->setStatusCode(200);
-                $this->response->setContent(json_encode($resp_data));
-
-                //update
-            } else if ($_POST['action'] == 'update') {
-
-                $record = json_decode($_POST['record_updated']);
-
-                $centroautorizado = new CentroAutorizado();
-                $centroautorizado = $centroautorizado->get($record->id);
-                $centroautorizado->codigo = $record->codigo;
-                $centroautorizado->nombre = $record->nombre;
-
-                $centroautorizado->save();
-
-                $resp_data = ["success" => 'true', "action" => 'update'];
-                $this->response->setStatusCode(200);
-                $this->response->setContent(json_encode($resp_data));
-
-                //delete 
-            } else if ($_POST['action'] == 'delete') {
-
-                $centroautorizado = new CentroAutorizado();
-                $record_ids = json_decode($_POST['records_ids_delete']);
-
-                foreach ($record_ids as $id) {
-                    $centroautorizado = $centroautorizado->get($id);
-                    $centroautorizado->delete();
+                    $resp_data = ["clientes" => array_slice($result, $start, $limit), "total" => count($result)];
+                    $this->response->setStatusCode(200);
+                    $this->response->setContent(json_encode($resp_data));
                 }
+            } else
+                //----------------------------------------------- Action Search ------------------------------------------------------
+                //cuando buscamos desde el grid  
+                if ($_GET['action'] == 'search') {
 
-                $resp_data = ["success" => 'true', "action" => 'delete'];
-                $this->response->setStatusCode(200);
-                $this->response->setContent(json_encode($resp_data));
+                    $query = $_GET['query'];
+
+                    // $result = [];
+
+                    $clientes_updated = $this->updateData($cliente_model, $centroautorizado_model, true);
+
+                    $result = $this->searchData($clientes_updated, $query);
+
+                    $start = $_GET['start'];
+                    $limit = $_GET['limit'];
+
+                    $resp_data = ["clientes" => array_slice($result, $start, $limit), "total" => count($result)];
+                    $this->response->setStatusCode(200);
+                    $this->response->setContent(json_encode($resp_data));
+                }
+        } else
+            // ------------------------------------- Method: Post -> Create, Update, Delete -------------------------------------------------
+
+            if ($this->request->isMethod('POST')) {
+
+                // ------------------------------------------------- Create -------------------------------------------------------------
+                if ($_POST['action'] == 'create') {
+
+                    $codigo = $_POST['codigo'];
+                    $nombre = $_POST['nombre'];
+
+                    $centroautorizado = new CentroAutorizado();
+
+                    $centroautorizado->codigo = $codigo;
+                    $centroautorizado->nombre = $nombre;
+
+                    $centroautorizado->save();
+
+                    $resp_data = ["success" => 'true', "action" => 'create'];
+                    $this->response->setStatusCode(200);
+                    $this->response->setContent(json_encode($resp_data));
+
+                    //--------------------------------------------------- Update -------------------------------------------------------
+                } else if ($_POST['action'] == 'update') {
+
+                    $record = json_decode($_POST['record_updated']);
+
+                    $centroautorizado = new CentroAutorizado();
+                    $centroautorizado = $centroautorizado->get($record->id);
+                    $centroautorizado->codigo = $record->codigo;
+                    $centroautorizado->nombre = $record->nombre;
+
+                    $centroautorizado->save();
+
+                    $resp_data = ["success" => 'true', "action" => 'update'];
+                    $this->response->setStatusCode(200);
+                    $this->response->setContent(json_encode($resp_data));
+                } else
+                    //----------------------------------------------------- Delete ------------------------------------------------
+
+                    if ($_POST['action'] == 'delete') {
+
+                        $centroautorizado = new CentroAutorizado();
+                        $record_ids = json_decode($_POST['records_ids_delete']);
+
+                        foreach ($record_ids as $id) {
+                            $centroautorizado = $centroautorizado->get($id);
+                            $centroautorizado->delete();
+                        }
+
+                        $resp_data = ["success" => 'true', "action" => 'delete'];
+                        $this->response->setStatusCode(200);
+                        $this->response->setContent(json_encode($resp_data));
+                    }
             }
-        }
     }
 }

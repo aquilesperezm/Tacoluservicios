@@ -14,7 +14,8 @@ use FacturaScripts\Plugins\Tacoluservicios\Model\CentroAutorizado;
 class CentroAutorizadoManager extends ApiController
 {
 
-    private function searchData($centros, $query) {
+    private function searchData($centros, $query)
+    {
 
         $result = [];
 
@@ -42,16 +43,16 @@ class CentroAutorizadoManager extends ApiController
 
         $d = new CentroAutorizado();
 
-        //read and search
+        //----------------------------------------------- Method Get: Read and Search ------------------------------------------------
         if ($this->request->isMethod('GET')) {
 
-            //read
+            //------------------------------------------------------------- Read ---------------------------------------------------
             if ($_GET['action'] == 'read') {
 
 
                 $query = isset($_GET['query']) ? $_GET['query'] : null;
 
-                //reading from grid
+                //-------------------------------------------------- Reading from grid -------------------------------------------------
                 if (!$query || $query == 'all') {
 
                     $start = $_GET['start'];
@@ -62,16 +63,16 @@ class CentroAutorizadoManager extends ApiController
                     $data = ["centrosautorizados" => array_slice($result, $start, $limit), "total" => count($result)];
                     $this->response->setStatusCode(200);
                     $this->response->setContent(json_encode($data));
-
-                    //reading and search from combobox    
-                } else {
+                }
+                //---------------------------------------- Reading and Search from combobox ---------------------------------------
+                else {
 
                     $query = $_GET['query'];
 
                     $ca = new CentroAutorizado();
                     $data = $ca->all();
 
-                    $result = $this->searchData($data,$query);
+                    $result = $this->searchData($data, $query);
 
                     $start = $_GET['start'];
                     $limit = $_GET['limit'];
@@ -81,15 +82,16 @@ class CentroAutorizadoManager extends ApiController
                     $this->response->setContent(json_encode($resp_data));
                 }
             } else
+                //----------------------------------------------- Action Search ------------------------------------------------------
                 //cuando buscamos desde el grid  
                 if ($_GET['action'] == 'search') {
 
                     $query = $_GET['query'];
- 
+
                     $ca = new CentroAutorizado();
                     $data = $ca->all();
 
-                    $result = $this->searchData($data,$query);
+                    $result = $this->searchData($data, $query);
 
                     $start = $_GET['start'];
                     $limit = $_GET['limit'];
@@ -99,10 +101,10 @@ class CentroAutorizadoManager extends ApiController
                     $this->response->setContent(json_encode($resp_data));
                 }
         } else
-            //create, update, delete
+            // ------------------------------------- Method: Post -> Create, Update, Delete -------------------------------------------------
             if ($this->request->isMethod('POST')) {
 
-                //create
+                // ------------------------------------------------- Create -------------------------------------------------------------
                 if ($_POST['action'] == 'create') {
 
                     $codigo = $_POST['codigo'];
@@ -118,9 +120,9 @@ class CentroAutorizadoManager extends ApiController
                     $resp_data = ["success" => 'true', "action" => 'create'];
                     $this->response->setStatusCode(200);
                     $this->response->setContent(json_encode($resp_data));
-
-                    //update
-                } else if ($_POST['action'] == 'update') {
+                }
+                //--------------------------------------------------- Update -------------------------------------------------------
+                else if ($_POST['action'] == 'update') {
 
                     $record = json_decode($_POST['record_updated']);
 
@@ -135,8 +137,11 @@ class CentroAutorizadoManager extends ApiController
                     $this->response->setStatusCode(200);
                     $this->response->setContent(json_encode($resp_data));
 
-                    //delete 
-                } else if ($_POST['action'] == 'delete') {
+                   
+                }
+                //----------------------------------------------------- Delete ------------------------------------------------
+
+                else if ($_POST['action'] == 'delete') {
 
                     $d = new CentroAutorizado();
                     $record_ids = json_decode($_POST['records_ids_delete']);

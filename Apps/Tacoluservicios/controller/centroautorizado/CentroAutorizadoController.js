@@ -11,7 +11,7 @@ Ext.define("TCSRV.controller.centroautorizado.CentroAutorizadoController", {
   control: {
     'centroautorizado-grid toolbar[dock="top"] textfield[fieldLabel="Buscar"]': {
       beforerender: (cmp) => {
-        cmp.setConfig('emptyText','Código, Nombre');
+        cmp.setEmptyText('Buscar por: Código ó Nombre')
       },
     },
 

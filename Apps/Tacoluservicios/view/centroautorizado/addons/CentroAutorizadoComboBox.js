@@ -13,6 +13,7 @@ Ext.define('TCSRV.view.centroautorizado.addons.CentroAutorizadoComboBox',{
       minWidth:350,
    },
    queryParam:'query',
-   allQuery:'all'
+   allQuery:'all',
+   emptyText:'Código o Nombre'
 
 });

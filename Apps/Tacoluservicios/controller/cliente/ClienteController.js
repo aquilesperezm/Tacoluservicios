@@ -11,11 +11,9 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
 
   control: {
     'cliente-grid toolbar[dock="top"] textfield[fieldLabel="Buscar"]': {
-      beforerender: (cmp) => {
-        cmp.setConfig(
-          "emptyText",
-          "Nombre, Correo Electrónico, Número Fiscal, Teléfono, Centro Autorizado"
-        );
+      afterrender: (cmp) => {
+        cmp.setEmptyText("Buscar por: Nombre, Correo Electrónico, Número Fiscal, Teléfono ó Centro Autorizado")
+        
       },
     },
 
