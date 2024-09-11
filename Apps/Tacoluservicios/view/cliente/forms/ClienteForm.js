@@ -52,7 +52,7 @@ Ext.define("TCSRV.view.cliente.forms.ClienteForm", {
         {
           xtype: "textfield",
           fieldLabel: "Teléfono",
-          allowBlank: false,
+          //allowBlank: false,
           name: "telefono1"
         },
         {
@@ -64,7 +64,7 @@ Ext.define("TCSRV.view.cliente.forms.ClienteForm", {
         {
           xtype: "textarea",
           fieldLabel: "Observaciones",
-          allowBlank: false,
+          //allowBlank: false,
           name: "observaciones",
         },
       ],

@@ -174,6 +174,8 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
     let grid = context.grid;
     let store = grid.getStore();
 
+    //console.log(context.record.data);
+
     Ext.Ajax.request({
       method: "POST",
       headers: { Token: "Tacoluservicios2024**" },

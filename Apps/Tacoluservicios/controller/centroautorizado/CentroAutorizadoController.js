@@ -6,7 +6,9 @@ Ext.define("TCSRV.controller.centroautorizado.CentroAutorizadoController", {
     "centroautorizado.forms.CentroAutorizadoForm",
     "centroautorizado.addons.CentroAutorizadoMsg",
   ],
-  stores: ["centroautorizado.CentroAutorizadoStore"],
+  stores: [
+    "centroautorizado.CentroAutorizadoStore"
+  ],
 
   control: {
     'centroautorizado-grid toolbar[dock="top"] textfield[fieldLabel="Buscar"]': {

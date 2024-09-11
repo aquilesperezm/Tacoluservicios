@@ -40,7 +40,7 @@ Ext.define("TCSRV.view.cliente.ClienteView", {
       flex: 1,
       editor: {
         xtype: "textfield",
-        allowBlank: false,
+        //allowBlank: false,
       },
     },
     {
@@ -48,8 +48,24 @@ Ext.define("TCSRV.view.cliente.ClienteView", {
       dataIndex: "nombre_centroautorizado",
       flex: 1,
       editor: {
-        xtype: "combobox",
+        xtype: "centroautorizado_combobox",
         allowBlank: false,
+        fieldLabel: "",
+        valueField:'nombre',
+        listeners:{
+          change: (cmp,nv,ov,e)=>{
+            let grid_clientes = cmp.up('grid');
+            let selected_record = grid_clientes.getSelectionModel().getSelection()[0];
+            let id_record_combo = cmp.getSelection().get('id');
+
+            selected_record.set('id_centroautorizado',id_record_combo);
+           // selected_record.commit();
+
+          }
+        }
+        //displayField: "nombre_centroautorizado",
+       // valueField: "id_centroautorizado",
+       // store:'centroautorizado.addons.CentroAutorizadoComboStore'
       },
     },
     {
@@ -60,5 +76,5 @@ Ext.define("TCSRV.view.cliente.ClienteView", {
         xtype: "textfield",
       },
     },
-  ]
+  ],
 });

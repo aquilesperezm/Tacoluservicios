@@ -181,14 +181,20 @@ class ClienteManager extends ApiController
                     //--------------------------------------------------- Update -------------------------------------------------------
                 } else if ($_POST['action'] == 'update') {
 
-                   /* $record = json_decode($_POST['record_updated']);
+                    $record = json_decode($_POST['record_updated']);
 
-                    $centroautorizado = new CentroAutorizado();
-                    $centroautorizado = $centroautorizado->get($record->id);
-                    $centroautorizado->codigo = $record->codigo;
-                    $centroautorizado->nombre = $record->nombre;
+                    $cliente = new CustomCliente();
+                    $cliente = $cliente->get($record->codcliente);
 
-                    $centroautorizado->save();*/
+                    $cliente->cifnif = $record->cifnif;
+                    $cliente->nombre = $record->nombre;
+                    $cliente->email = $record->email;
+                    $cliente->telefono1 = $record->telefono1;
+                    $cliente->observaciones = $record->observaciones;
+
+                    $cliente->id_centroautorizado = $record->id_centroautorizado;
+               
+                    $cliente->save();
 
                     $resp_data = ["success" => 'true', "action" => 'update'];
                     $this->response->setStatusCode(200);

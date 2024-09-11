@@ -99,7 +99,8 @@ class CentroAutorizadoManager extends ApiController
                     $resp_data = ["centrosautorizados" => array_slice($result, $start, $limit), "total" => count($result)];
                     $this->response->setStatusCode(200);
                     $this->response->setContent(json_encode($resp_data));
-                }
+                } 
+                
         } else
             // ------------------------------------- Method: Post -> Create, Update, Delete -------------------------------------------------
             if ($this->request->isMethod('POST')) {
