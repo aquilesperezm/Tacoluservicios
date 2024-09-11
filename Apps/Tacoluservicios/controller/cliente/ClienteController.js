@@ -86,7 +86,7 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
 
     let ids = [];
     selection.forEach((e, i, a) => {
-      ids.push(e.data.id);
+      ids.push(e.data.codcliente);
     });
 
     if (selection.length > 0) {

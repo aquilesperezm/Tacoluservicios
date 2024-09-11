@@ -204,13 +204,13 @@ class ClienteManager extends ApiController
 
                     if ($_POST['action'] == 'delete') {
 
-                        /*$centroautorizado = new CentroAutorizado();
+                        $cliente = new CustomCliente();
                         $record_ids = json_decode($_POST['records_ids_delete']);
 
                         foreach ($record_ids as $id) {
-                            $centroautorizado = $centroautorizado->get($id);
-                            $centroautorizado->delete();
-                        }*/
+                            $cliente = $cliente->get($id);
+                            $cliente->delete();
+                        }
 
                         $resp_data = ["success" => 'true', "action" => 'delete'];
                         $this->response->setStatusCode(200);

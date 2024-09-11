@@ -63,9 +63,7 @@ Ext.define("TCSRV.view.cliente.ClienteView", {
 
           }
         }
-        //displayField: "nombre_centroautorizado",
-       // valueField: "id_centroautorizado",
-       // store:'centroautorizado.addons.CentroAutorizadoComboStore'
+        
       },
     },
     {
