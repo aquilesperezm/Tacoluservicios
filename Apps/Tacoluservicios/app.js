@@ -7,6 +7,7 @@ Ext.application({
     "base.BaseController",
     "centroautorizado.CentroAutorizadoController",
     "cliente.ClienteController",
+    "tipointervencion.TipoIntervencionController"
   ],
 
   launch: () => {

@@ -1,41 +1,40 @@
-Ext.define("TCSRV.controller.cliente.ClienteController", {
+Ext.define("TCSRV.controller.tipointervencion.TipoIntervencionController", {
   extend: "Ext.app.Controller",
 
   views: [
-    "cliente.ClienteView",
-    "cliente.forms.ClienteForm",
-    "cliente.addons.ClienteMsg",
-    "centroautorizado.addons.CentroAutorizadoComboBox",
+    "tipointervencion.TipoIntervencionView",
+    //"tipointervencion.forms.TipoIntervencionForm",
+    //"tipointervencion.addons.TipoIntervencionMsg",
   ],
-  stores: ["cliente.ClienteStore"],
+  stores: [
+    "tipointervencion.TipoIntervencionStore"
+  ],
 
   control: {
-    'cliente-grid toolbar[dock="top"] textfield[fieldLabel="Buscar"]': {
-      afterrender: (cmp) => {
-        cmp.setEmptyText(
-          "Buscar por: Nombre, Correo Electrónico, Número Fiscal, Teléfono ó Centro Autorizado"
-        );
+    'tipointervencion-grid toolbar[dock="top"] textfield[fieldLabel="Buscar"]': {
+      beforerender: (cmp) => {
+        cmp.setEmptyText('Buscar por: Código ó Nombre')
       },
     },
 
     //click en el boton Adicionar
-    'cliente-grid toolbar[dock="top"] button[text="Adicionar"]': {
+    'tipointervencion-grid toolbar[dock="top"] button[text="Adicionar"]': {
       click: "onClickButtonAdicionar",
     },
     //click en el boton Eliminar
-    'cliente-grid toolbar[dock="top"] button[text="Eliminar"]': {
+    'tipointervencion-grid toolbar[dock="top"] button[text="Eliminar"]': {
       click: "onClickButtonEliminar",
     },
     //click en el boton Detalles
-    'cliente-grid toolbar[dock="top"] button[text="Detalles"]': {
+    'tipointervencion-grid toolbar[dock="top"] button[text="Detalles"]': {
       click: "onClickButtonDetalles",
     },
     //cuando se actualiza una fila
-    "cliente-grid": {
-      edit: "onRowEditcliente",
+    "tipointervencion-grid": {
+      edit: "onRowEditTipoIntervencion",
     },
-    "#CreateNew_cliente": {
-      click: "onClickGuardarNewcliente",
+    "#CreateNew_TipoIntervencion": {
+      click: "onClickGuardarNewTipoIntervencion",
     },
   },
 
@@ -44,22 +43,22 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
       draggable: false,
       resizable: false,
       modal: true,
-      title: "Adicionar un nuevo Cliente",
+      title: "Adicionar un nuevo Centro Autorizado",
       items: [
         {
-          xtype: "cliente-form",
+          xtype: "tipointervencion-form",
         },
       ],
       buttons: [
         {
           text: "Guardar",
-          id: "CreateNew_cliente",
+          id: "CreateNew_TipoIntervencion",
         },
       ],
     }).show();
   },
 
-  onClickGuardarNewcliente: (btn, e) => {
+  onClickGuardarNewTipoIntervencion: (btn, e) => {
     let window = btn.up("window");
     let form_panel = window.down("form");
 
@@ -72,29 +71,31 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
         },
         success: function (form, action) {
           window.close();
-          Ext.StoreManager.lookup("cliente.ClienteStore").load();
+          Ext.StoreManager.lookup(
+            "tipointervencion.TipoIntervencionStore"
+          ).load();
         },
         failure: function (form, action) {},
       });
-    } else Ext.Msg.alert("Error de Validación", "Los campos deben ser válidos");
+    } else Ext.Msg.alert("Error de Validación","Los campos deben ser válidos");
   },
 
   // url: "api/3/get_vehiculos",
   onClickButtonEliminar: (btn, e) => {
-    let grid = btn.up("cliente-grid", 2);
+    let grid = btn.up("tipointervencion-grid", 2);
     let grid_sm = grid.getSelectionModel();
     let selection = grid_sm.getSelection();
 
     let ids = [];
     selection.forEach((e, i, a) => {
-      ids.push(e.data.codcliente);
+      ids.push(e.data.id);
     });
 
     if (selection.length > 0) {
       Ext.Msg.show({
-        title: "Eliminar Clientes",
+        title: "Eliminar Centros Autorizados",
         message:
-          "Usted desea eliminar los Clientes seleccionados, ¿Está segur@?",
+          "Usted desea eliminar los Centros Autorizados seleccionados, ¿Está segur@?",
         buttons: Ext.Msg.YESNO,
         icon: Ext.Msg.WARNING,
         fn: function (btn) {
@@ -106,7 +107,7 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
             Ext.Ajax.request({
               method: "POST",
               headers: { Token: "Tacoluservicios2024**" },
-              url: "api/3/cliente_manager",
+              url: "api/3/TipoIntervencion_manager",
               params: {
                 action: "delete",
                 records_ids_delete: Ext.encode(ids),
@@ -124,7 +125,7 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
     } else {
       Ext.Msg.show({
         title: "Error",
-        message: "Debe seleccionar al menos un Cliente",
+        message: "Debe seleccionar al menos un Centro Autorizado",
         buttons: Ext.Msg.OK,
         icon: Ext.Msg.ERROR,
       });
@@ -132,7 +133,7 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
   },
 
   onClickButtonDetalles: (btn, e) => {
-    let grid = btn.up("cliente-grid", 2);
+    let grid = btn.up("tipointervencion-grid", 2);
     let grid_sm = grid.getSelectionModel();
     let selection = grid_sm.getSelection();
 
@@ -146,59 +147,7 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
             defaults: {
               padding: 20,
             },
-            layout: {
-              type: "table",
-              columns: 2,
-            },
             items: [
-              {
-                xtype: "container",
-                defaults: {
-                  padding: 20,
-                },
-                items: [
-                  {
-                    xtype: "displayfield",
-                    fieldLabel: "Código CIF/NIF",
-                    value: selection[0].data.cifnif,
-                  },
-                  {
-                    xtype: "displayfield",
-                    fieldLabel: "Nombre",
-                    value: selection[0].data.nombre,
-                  },
-                  {
-                    xtype: "displayfield",
-                    fieldLabel: "Correo Electrónico",
-                    value: selection[0].data.email,
-                  },
-                ],
-              },
-              {
-                xtype: "container",
-                defaults: {
-                  padding: 20,
-                },
-                items: [
-                  {
-                    xtype: "displayfield",
-                    fieldLabel: "Teléfono",
-                    value: selection[0].data.telefono1,
-                  },
-                  {
-                    xtype: "displayfield",
-                    fieldLabel: "Centro Autorizado",
-                    value: selection[0].data.nombre_centroautorizado,
-                  },
-                  {
-                    xtype: "displayfield",
-                    fieldLabel: "Observaciones",
-                    value: selection[0].data.observaciones,
-                  },
-                ],
-              },
-            ],
-            /* items: [
               {
                 xtype: "displayfield",
                 fieldLabel: "Código",
@@ -209,30 +158,28 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
                 fieldLabel: "Nombre",
                 value: selection[0].data.nombre,
               },
-            ],*/
+            ],
           },
         ],
       }).show();
     } else {
       Ext.Msg.show({
         title: "Error",
-        message: "Debe seleccionar un único Cliente",
+        message: "Debe seleccionar un único Centro Autorizado",
         buttons: Ext.Msg.OK,
         icon: Ext.Msg.ERROR,
       });
     }
   },
 
-  onRowEditcliente: (editor, context) => {
+  onRowEditTipoIntervencion: (editor, context) => {
     let grid = context.grid;
     let store = grid.getStore();
-
-    //console.log(context.record.data);
 
     Ext.Ajax.request({
       method: "POST",
       headers: { Token: "Tacoluservicios2024**" },
-      url: "api/3/cliente_manager",
+      url: "api/3/TipoIntervencion_manager",
       params: {
         action: "update",
         record_updated: Ext.encode(context.record.data),

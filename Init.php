@@ -114,6 +114,10 @@ class Init extends InitClass
         //Cliente
         Kernel::addRoute('/api/3/cliente_manager', 'ClienteManager', -1);
         ApiRoot::addCustomResource('cliente_manager');
+
+        //TipoIntervencion
+        Kernel::addRoute('/api/3/tipointervencion_manager', 'TipoIntervencionManager', -1);
+        ApiRoot::addCustomResource('tipointervencion_manager');
     }
 
     public function uninstall(): void
