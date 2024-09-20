@@ -5,6 +5,7 @@ namespace FacturaScripts\Plugins\Tacoluservicios\Controller;
 use FacturaScripts\Core\Template\ApiController;
 
 use FacturaScripts\Plugins\Tacoluservicios\Model\CentroAutorizado;
+use FacturaScripts\Plugins\Tacoluservicios\Model\TipoIntervencion;
 
 /**
  * Un controlador es básicamente una página o una opción del menú de FacturaScripts.
@@ -19,17 +20,17 @@ class TipoIntervencionManager extends ApiController
 
         $result = [];
 
-        $ca = new CentroAutorizado();
+        $ca = new TipoIntervencion();
         $data = $ca->all();
 
         foreach ($data as $d) {
 
             //codigo
-            if (str_contains(strtolower($d->codigo), strtolower($query))) {
+           /* if (str_contains(strtolower($d->codigo), strtolower($query))) {
                 array_push($result, $d);
-            }
+            }*/
             //nombre
-            else if (str_contains(strtolower($d->nombre), strtolower($query))) {
+             if (str_contains(strtolower($d->nombre), strtolower($query))) {
                 array_push($result, $d);
             } else continue;
         }
@@ -41,7 +42,7 @@ class TipoIntervencionManager extends ApiController
     protected function runResource(): void
     {
 
-        $d = new CentroAutorizado();
+        $d = new TipoIntervencion();
 
         //----------------------------------------------- Method Get: Read and Search ------------------------------------------------
         if ($this->request->isMethod('GET')) {
@@ -60,7 +61,7 @@ class TipoIntervencionManager extends ApiController
 
                     $result = $d->all();
 
-                    $data = ["centrosautorizados" => array_slice($result, $start, $limit), "total" => count($result)];
+                    $data = ["tiposintervenciones" => array_slice($result, $start, $limit), "total" => count($result)];
                     $this->response->setStatusCode(200);
                     $this->response->setContent(json_encode($data));
                 }
@@ -69,15 +70,15 @@ class TipoIntervencionManager extends ApiController
 
                     $query = $_GET['query'];
 
-                    $ca = new CentroAutorizado();
-                    $data = $ca->all();
+                    $ti = new TipoIntervencion();
+                    $data = $ti->all();
 
                     $result = $this->searchData($data, $query);
 
                     $start = $_GET['start'];
                     $limit = $_GET['limit'];
 
-                    $resp_data = ["centrosautorizados" => array_slice($result, $start, $limit), "total" => count($result)];
+                    $resp_data = ["tiposintervenciones" => array_slice($result, $start, $limit), "total" => count($result)];
                     $this->response->setStatusCode(200);
                     $this->response->setContent(json_encode($resp_data));
                 }
@@ -88,15 +89,15 @@ class TipoIntervencionManager extends ApiController
 
                     $query = $_GET['query'];
 
-                    $ca = new CentroAutorizado();
-                    $data = $ca->all();
+                    $ti = new TipoIntervencion();
+                    $data = $ti->all();
 
                     $result = $this->searchData($data, $query);
 
                     $start = $_GET['start'];
                     $limit = $_GET['limit'];
 
-                    $resp_data = ["centrosautorizados" => array_slice($result, $start, $limit), "total" => count($result)];
+                    $resp_data = ["tiposintervenciones" => array_slice($result, $start, $limit), "total" => count($result)];
                     $this->response->setStatusCode(200);
                     $this->response->setContent(json_encode($resp_data));
                 } 

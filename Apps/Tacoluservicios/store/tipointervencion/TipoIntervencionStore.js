@@ -7,7 +7,7 @@ Ext.define("TCSRV.store.tipointervencion.TipoIntervencionStore", {
     url: "api/3/tipointervencion_manager",
     reader: {
       type: "json",
-      rootProperty: "tipointervenciones",
+      rootProperty: "tiposintervenciones",
       totalProperty: "total",
     },
     extraParams: {

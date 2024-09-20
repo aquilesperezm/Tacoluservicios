@@ -13,7 +13,7 @@ Ext.define("TCSRV.controller.tipointervencion.TipoIntervencionController", {
   control: {
     'tipointervencion-grid toolbar[dock="top"] textfield[fieldLabel="Buscar"]': {
       beforerender: (cmp) => {
-        cmp.setEmptyText('Buscar por: Código ó Nombre')
+        cmp.setEmptyText('Buscar por: Nombre')
       },
     },
 
