@@ -8,7 +8,8 @@ Ext.application({
     "centroautorizado.CentroAutorizadoController",
     "cliente.ClienteController",
     "tipointervencion.TipoIntervencionController",
-    "marcavehiculo.MarcaVehiculoController"
+    "marcavehiculo.MarcaVehiculoController",
+    "modelovehiculo.ModeloVehiculoController"
 
   ],
 

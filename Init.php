@@ -94,15 +94,15 @@ class Init extends InitClass
 
         $verify_api_exists = $db->select("SELECT nick FROM api_keys WHERE nick='plugin_tacoluservicios'");
         $verify_api_isenabled = $db->select("SELECT properties FROM settings");
-     
+
         $settings = json_decode($verify_api_isenabled[0]['properties']);
         //Enabling API Engine
         $settings->enable_api = true;
-        $db->exec("UPDATE `settings` SET `properties` ='".json_encode($settings)."'");
+        $db->exec("UPDATE `settings` SET `properties` ='" . json_encode($settings) . "'");
 
         // Create APy Key Access
-        if(count($verify_api_exists)==0)
-        $db->exec("INSERT INTO `api_keys`(`nick`,`apikey`,`creationdate`,`description`,`enabled`,`fullaccess`) 
+        if (count($verify_api_exists) == 0)
+            $db->exec("INSERT INTO `api_keys`(`nick`,`apikey`,`creationdate`,`description`,`enabled`,`fullaccess`) 
             VALUES('plugin_tacoluservicios', 'Tacoluservicios2024**','$fecha','API para el plugin TacoluServicios', true, true)");
 
 
@@ -119,9 +119,13 @@ class Init extends InitClass
         Kernel::addRoute('/api/3/tipointervencion_manager', 'TipoIntervencionManager', -1);
         ApiRoot::addCustomResource('tipointervencion_manager');
 
-         //MarcaVehiculo
-         Kernel::addRoute('/api/3/marcavehiculo_manager', 'MarcaVehiculoManager', -1);
-         ApiRoot::addCustomResource('marcavehiculo_manager');
+        //MarcaVehiculo
+        Kernel::addRoute('/api/3/marcavehiculo_manager', 'MarcaVehiculoManager', -1);
+        ApiRoot::addCustomResource('marcavehiculo_manager');
+
+        //ModeloVehiculo
+        Kernel::addRoute('/api/3/modelovehiculo_manager', 'ModeloVehiculoManager', -1);
+        ApiRoot::addCustomResource('modelovehiculo_manager');
     }
 
     public function uninstall(): void

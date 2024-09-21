@@ -81,7 +81,7 @@ Ext.define("TCSRV.view.dashboard.DashBoardView", {
         { xtype: "button", text: "Ordenes de Trabajo", padding: 5 },
       ],
       items: [{
-         xtype:'marcavehiculo-grid'
+         xtype:'modelovehiculo-grid'
       }],
     },
   ],

@@ -1,42 +1,40 @@
-Ext.define("TCSRV.controller.marcavehiculo.MarcaVehiculoController", {
+Ext.define("TCSRV.controller.modelovehiculo.ModeloVehiculoController", {
   extend: "Ext.app.Controller",
 
   views: [
-    "marcavehiculo.MarcaVehiculoView",
-    "marcavehiculo.forms.MarcaVehiculoForm",
-    "marcavehiculo.addons.MarcaVehiculoMsg",
-    "marcavehiculo.addons.MarcaVehiculoComboBox"
-
+    "modelovehiculo.ModeloVehiculoView",
+    "modelovehiculo.forms.ModeloVehiculoForm",
+    "modelovehiculo.addons.ModeloVehiculoMsg",
   ],
   stores: [
-    "marcavehiculo.MarcaVehiculoStore"
+    "modelovehiculo.ModeloVehiculoStore"
   ],
 
   control: {
-    'marcavehiculo-grid toolbar[dock="top"] textfield[fieldLabel="Buscar"]': {
+    'modelovehiculo-grid toolbar[dock="top"] textfield[fieldLabel="Buscar"]': {
       beforerender: (cmp) => {
-        cmp.setEmptyText('Buscar por: Nombre')
+        cmp.setEmptyText('Buscar por: Marca o Modelo')
       },
     },
 
     //click en el boton Adicionar
-    'marcavehiculo-grid toolbar[dock="top"] button[text="Adicionar"]': {
+    'modelovehiculo-grid toolbar[dock="top"] button[text="Adicionar"]': {
       click: "onClickButtonAdicionar",
     },
     //click en el boton Eliminar
-    'marcavehiculo-grid toolbar[dock="top"] button[text="Eliminar"]': {
+    'modelovehiculo-grid toolbar[dock="top"] button[text="Eliminar"]': {
       click: "onClickButtonEliminar",
     },
     //click en el boton Detalles
-    'marcavehiculo-grid toolbar[dock="top"] button[text="Detalles"]': {
+    'modelovehiculo-grid toolbar[dock="top"] button[text="Detalles"]': {
       click: "onClickButtonDetalles",
     },
     //cuando se actualiza una fila
-    "marcavehiculo-grid": {
-      edit: "onRowEditMarcaVehiculo",
+    "modelovehiculo-grid": {
+      edit: "onRowEditModeloVehiculo",
     },
-    "#CreateNew_MarcaVehiculo": {
-      click: "onClickGuardarNewMarcaVehiculo",
+    "#CreateNew_ModeloVehiculo": {
+      click: "onClickGuardarNewModeloVehiculo",
     },
   },
 
@@ -45,22 +43,22 @@ Ext.define("TCSRV.controller.marcavehiculo.MarcaVehiculoController", {
       draggable: false,
       resizable: false,
       modal: true,
-      title: "Adicionar una nueva Marca de Vehículo",
+      title: "Adicionar un nuevo Modelo de Vehículo",
       items: [
         {
-          xtype: "marcavehiculo-form",
+          xtype: "modelovehiculo-form",
         },
       ],
       buttons: [
         {
           text: "Guardar",
-          id: "CreateNew_MarcaVehiculo",
+          id: "CreateNew_ModeloVehiculo",
         },
       ],
     }).show();
   },
 
-  onClickGuardarNewMarcaVehiculo: (btn, e) => {
+  onClickGuardarNewModeloVehiculo: (btn, e) => {
     let window = btn.up("window");
     let form_panel = window.down("form");
 
@@ -74,7 +72,7 @@ Ext.define("TCSRV.controller.marcavehiculo.MarcaVehiculoController", {
         success: function (form, action) {
           window.close();
           Ext.StoreManager.lookup(
-            "marcavehiculo.MarcaVehiculoStore"
+            "modelovehiculo.ModeloVehiculoStore"
           ).load();
         },
         failure: function (form, action) {},
@@ -84,7 +82,7 @@ Ext.define("TCSRV.controller.marcavehiculo.MarcaVehiculoController", {
 
   // url: "api/3/get_vehiculos",
   onClickButtonEliminar: (btn, e) => {
-    let grid = btn.up("marcavehiculo-grid", 2);
+    let grid = btn.up("modelovehiculo-grid", 2);
     let grid_sm = grid.getSelectionModel();
     let selection = grid_sm.getSelection();
 
@@ -95,9 +93,9 @@ Ext.define("TCSRV.controller.marcavehiculo.MarcaVehiculoController", {
 
     if (selection.length > 0) {
       Ext.Msg.show({
-        title: "Eliminar Tipos de Intervenciones",
+        title: "Eliminar Modelos de Vehículos",
         message:
-          "Usted desea eliminar las Marcas de Vehículos seleccionadas, ¿Está segur@?",
+          "Usted desea eliminar los Modelos de Vehículos seleccionadas, ¿Está segur@?",
         buttons: Ext.Msg.YESNO,
         icon: Ext.Msg.WARNING,
         fn: function (btn) {
@@ -109,7 +107,7 @@ Ext.define("TCSRV.controller.marcavehiculo.MarcaVehiculoController", {
             Ext.Ajax.request({
               method: "POST",
               headers: { Token: "Tacoluservicios2024**" },
-              url: "api/3/marcavehiculo_manager",
+              url: "api/3/modelovehiculo_manager",
               params: {
                 action: "delete",
                 records_ids_delete: Ext.encode(ids),
@@ -127,7 +125,7 @@ Ext.define("TCSRV.controller.marcavehiculo.MarcaVehiculoController", {
     } else {
       Ext.Msg.show({
         title: "Error",
-        message: "Debe seleccionar al menos una Marca de Vehículo",
+        message: "Debe seleccionar al menos un Modelo de Vehículo",
         buttons: Ext.Msg.OK,
         icon: Ext.Msg.ERROR,
       });
@@ -135,7 +133,7 @@ Ext.define("TCSRV.controller.marcavehiculo.MarcaVehiculoController", {
   },
 
   onClickButtonDetalles: (btn, e) => {
-    let grid = btn.up("marcavehiculo-grid", 2);
+    let grid = btn.up("modelovehiculo-grid", 2);
     let grid_sm = grid.getSelectionModel();
     let selection = grid_sm.getSelection();
 
@@ -150,14 +148,14 @@ Ext.define("TCSRV.controller.marcavehiculo.MarcaVehiculoController", {
               padding: 20,
             },
             items: [
-              /*{
-                xtype: "displayfield",
-                fieldLabel: "Código",
-                value: selection[0].data.codigo,
-              },*/
               {
                 xtype: "displayfield",
-                fieldLabel: "Nombre",
+                fieldLabel: "Marca",
+                value: selection[0].data.nombre_marca,
+              },
+              {
+                xtype: "displayfield",
+                fieldLabel: "Modelo",
                 value: selection[0].data.nombre,
               },
             ],
@@ -167,21 +165,21 @@ Ext.define("TCSRV.controller.marcavehiculo.MarcaVehiculoController", {
     } else {
       Ext.Msg.show({
         title: "Error",
-        message: "Debe seleccionar un única Marca de Vehículo",
+        message: "Debe seleccionar un único Modelo de Vehículo",
         buttons: Ext.Msg.OK,
         icon: Ext.Msg.ERROR,
       });
     }
   },
 
-  onRowEditMarcaVehiculo: (editor, context) => {
+  onRowEditModeloVehiculo: (editor, context) => {
     let grid = context.grid;
     let store = grid.getStore();
 
     Ext.Ajax.request({
       method: "POST",
       headers: { Token: "Tacoluservicios2024**" },
-      url: "api/3/marcavehiculo_manager",
+      url: "api/3/modelovehiculo_manager",
       params: {
         action: "update",
         record_updated: Ext.encode(context.record.data),
