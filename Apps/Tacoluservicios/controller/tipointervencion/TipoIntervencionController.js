@@ -3,8 +3,8 @@ Ext.define("TCSRV.controller.tipointervencion.TipoIntervencionController", {
 
   views: [
     "tipointervencion.TipoIntervencionView",
-    //"tipointervencion.forms.TipoIntervencionForm",
-    //"tipointervencion.addons.TipoIntervencionMsg",
+    "tipointervencion.forms.TipoIntervencionForm",
+    "tipointervencion.addons.TipoIntervencionMsg",
   ],
   stores: [
     "tipointervencion.TipoIntervencionStore"
@@ -43,7 +43,7 @@ Ext.define("TCSRV.controller.tipointervencion.TipoIntervencionController", {
       draggable: false,
       resizable: false,
       modal: true,
-      title: "Adicionar un nuevo Centro Autorizado",
+      title: "Adicionar un nuevo Tipo de Intervención",
       items: [
         {
           xtype: "tipointervencion-form",
@@ -93,9 +93,9 @@ Ext.define("TCSRV.controller.tipointervencion.TipoIntervencionController", {
 
     if (selection.length > 0) {
       Ext.Msg.show({
-        title: "Eliminar Centros Autorizados",
+        title: "Eliminar Tipos de Intervenciones",
         message:
-          "Usted desea eliminar los Centros Autorizados seleccionados, ¿Está segur@?",
+          "Usted desea eliminar los Tipos de Intervención seleccionados, ¿Está segur@?",
         buttons: Ext.Msg.YESNO,
         icon: Ext.Msg.WARNING,
         fn: function (btn) {
@@ -107,7 +107,7 @@ Ext.define("TCSRV.controller.tipointervencion.TipoIntervencionController", {
             Ext.Ajax.request({
               method: "POST",
               headers: { Token: "Tacoluservicios2024**" },
-              url: "api/3/TipoIntervencion_manager",
+              url: "api/3/tipointervencion_manager",
               params: {
                 action: "delete",
                 records_ids_delete: Ext.encode(ids),
@@ -125,7 +125,7 @@ Ext.define("TCSRV.controller.tipointervencion.TipoIntervencionController", {
     } else {
       Ext.Msg.show({
         title: "Error",
-        message: "Debe seleccionar al menos un Centro Autorizado",
+        message: "Debe seleccionar al menos un Tipo de Intervención",
         buttons: Ext.Msg.OK,
         icon: Ext.Msg.ERROR,
       });
@@ -148,11 +148,11 @@ Ext.define("TCSRV.controller.tipointervencion.TipoIntervencionController", {
               padding: 20,
             },
             items: [
-              {
+              /*{
                 xtype: "displayfield",
                 fieldLabel: "Código",
                 value: selection[0].data.codigo,
-              },
+              },*/
               {
                 xtype: "displayfield",
                 fieldLabel: "Nombre",
@@ -165,7 +165,7 @@ Ext.define("TCSRV.controller.tipointervencion.TipoIntervencionController", {
     } else {
       Ext.Msg.show({
         title: "Error",
-        message: "Debe seleccionar un único Centro Autorizado",
+        message: "Debe seleccionar un único Tipo de Intervención",
         buttons: Ext.Msg.OK,
         icon: Ext.Msg.ERROR,
       });
@@ -179,7 +179,7 @@ Ext.define("TCSRV.controller.tipointervencion.TipoIntervencionController", {
     Ext.Ajax.request({
       method: "POST",
       headers: { Token: "Tacoluservicios2024**" },
-      url: "api/3/TipoIntervencion_manager",
+      url: "api/3/tipointervencion_manager",
       params: {
         action: "update",
         record_updated: Ext.encode(context.record.data),

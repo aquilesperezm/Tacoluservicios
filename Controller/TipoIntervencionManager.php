@@ -109,12 +109,12 @@ class TipoIntervencionManager extends ApiController
                 // ------------------------------------------------- Create -------------------------------------------------------------
                 if ($_POST['action'] == 'create') {
 
-                    $codigo = $_POST['codigo'];
+                    //$codigo = $_POST['codigo'];
                     $nombre = $_POST['nombre'];
 
-                    $d = new CentroAutorizado();
+                    $d = new TipoIntervencion();
 
-                    $d->codigo = $codigo;
+                    //$d->codigo = $codigo;
                     $d->nombre = $nombre;
 
                     $d->save();
@@ -128,9 +128,9 @@ class TipoIntervencionManager extends ApiController
 
                     $record = json_decode($_POST['record_updated']);
 
-                    $d = new CentroAutorizado();
+                    $d = new TipoIntervencion();
                     $d = $d->get($record->id);
-                    $d->codigo = $record->codigo;
+                    //$d->codigo = $record->codigo;
                     $d->nombre = $record->nombre;
 
                     $d->save();
@@ -145,7 +145,7 @@ class TipoIntervencionManager extends ApiController
 
                 else if ($_POST['action'] == 'delete') {
 
-                    $d = new CentroAutorizado();
+                    $d = new TipoIntervencion();
                     $record_ids = json_decode($_POST['records_ids_delete']);
 
                     foreach ($record_ids as $id) {
