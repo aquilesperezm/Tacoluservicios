@@ -3,6 +3,8 @@ Ext.define("TCSRV.model.modelovehiculo.ModeloVehiculoModel", {
   fields: [
     { name: "id", type: "int" },
     { name: "nombre", type: "string" },
+    { name: "idmarca", type: "int" },
+    { name: "nombre_marca", type: "string" },
   ],
 
   idProperty: "id",

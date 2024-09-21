@@ -14,6 +14,7 @@ Ext.define("TCSRV.view.modelovehiculo.forms.ModeloVehiculoForm", {
   items: [
     {
       xtype: "marcavehiculo_combobox",
+      name:'idmarca',
       fieldLabel: "Marca",
       listeners:{
         render: (cmp)=>{
@@ -24,7 +25,7 @@ Ext.define("TCSRV.view.modelovehiculo.forms.ModeloVehiculoForm", {
     },
     {
       xtype: "textfield",
-      fieldLabel: "Nombre",
+      fieldLabel: "Modelo",
       allowBlank: false,
       name: "nombre"/*,
       listeners: {

@@ -130,12 +130,12 @@ class ModeloVehiculoManager extends ApiController
                 // ------------------------------------------------- Create -------------------------------------------------------------
                 if ($_POST['action'] == 'create') {
 
-                    //$codigo = $_POST['codigo'];
+                    $idmarca = $_POST['idmarca'];
                     $nombre = $_POST['nombre'];
 
                     $d = new ModeloVehiculo();
 
-                    //$d->codigo = $codigo;
+                    $d->idmarca = $idmarca;
                     $d->nombre = $nombre;
 
                     $d->save();
@@ -151,7 +151,8 @@ class ModeloVehiculoManager extends ApiController
 
                     $d = new ModeloVehiculo();
                     $d = $d->get($record->id);
-                    //$d->codigo = $record->codigo;
+
+                    $d->idmarca = $record->idmarca;
                     $d->nombre = $record->nombre;
 
                     $d->save();
