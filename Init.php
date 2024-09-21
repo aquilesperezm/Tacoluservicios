@@ -118,6 +118,10 @@ class Init extends InitClass
         //TipoIntervencion
         Kernel::addRoute('/api/3/tipointervencion_manager', 'TipoIntervencionManager', -1);
         ApiRoot::addCustomResource('tipointervencion_manager');
+
+         //MarcaVehiculo
+         Kernel::addRoute('/api/3/marcavehiculo_manager', 'MarcaVehiculoManager', -1);
+         ApiRoot::addCustomResource('marcavehiculo_manager');
     }
 
     public function uninstall(): void

@@ -7,7 +7,9 @@ Ext.application({
     "base.BaseController",
     "centroautorizado.CentroAutorizadoController",
     "cliente.ClienteController",
-    "tipointervencion.TipoIntervencionController"
+    "tipointervencion.TipoIntervencionController",
+    "marcavehiculo.MarcaVehiculoController"
+
   ],
 
   launch: () => {
