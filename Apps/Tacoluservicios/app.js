@@ -9,7 +9,8 @@ Ext.application({
     "cliente.ClienteController",
     "tipointervencion.TipoIntervencionController",
     "marcavehiculo.MarcaVehiculoController",
-    "modelovehiculo.ModeloVehiculoController"
+    "modelovehiculo.ModeloVehiculoController",
+    "vehiculo.VehiculoController"
 
   ],
 

@@ -126,6 +126,10 @@ class Init extends InitClass
         //ModeloVehiculo
         Kernel::addRoute('/api/3/modelovehiculo_manager', 'ModeloVehiculoManager', -1);
         ApiRoot::addCustomResource('modelovehiculo_manager');
+
+        //Vehiculo
+        Kernel::addRoute('/api/3/vehiculo_manager', 'VehiculoManager', -1);
+        ApiRoot::addCustomResource('vehiculo_manager');
     }
 
     public function uninstall(): void

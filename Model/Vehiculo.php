@@ -19,7 +19,7 @@ class Vehiculo extends ModelClass
     public $id;
 
     /** @var int */
-    public $idcliente;
+    public $codcliente;
 
     /** @var int */
     public $idmodelo;
@@ -34,7 +34,7 @@ class Vehiculo extends ModelClass
     {
         parent::clear();
         $this->fecha_matricula = date(self::DATE_STYLE);
-        $this->idcliente = 0;
+        //$this->idcliente = 0;
         $this->idmodelo = 0;
     }
 
