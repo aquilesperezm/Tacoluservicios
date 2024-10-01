@@ -5,6 +5,7 @@ Ext.define("TCSRV.controller.modelovehiculo.ModeloVehiculoController", {
     "modelovehiculo.ModeloVehiculoView",
     "modelovehiculo.forms.ModeloVehiculoForm",
     "modelovehiculo.addons.ModeloVehiculoMsg",
+    "modelovehiculo.addons.ModeloVehiculoComboBox",
   ],
   stores: [
     "modelovehiculo.ModeloVehiculoStore"

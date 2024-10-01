@@ -5,6 +5,7 @@ Ext.define("TCSRV.controller.centroautorizado.CentroAutorizadoController", {
     "centroautorizado.CentroAutorizadoView",
     "centroautorizado.forms.CentroAutorizadoForm",
     "centroautorizado.addons.CentroAutorizadoMsg",
+    "centroautorizado.addons.CentroAutorizadoComboBox",
   ],
   stores: [
     "centroautorizado.CentroAutorizadoStore"

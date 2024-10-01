@@ -39,25 +39,25 @@ Ext.define("TCSRV.view.vehiculo.VehiculoView", {
       dataIndex: "nombre_cliente",
       flex: 1,
       editor: {
-        xtype: "textfield",
+        xtype: "combobox",
         allowBlank: false,
       },
     },
     {
       text: "CIFNIF / Cliente",
       dataIndex: "cifnif_cliente",
-      flex: 1,
+      flex: 1/*,
       editor: {
         xtype: "textfield",
         allowBlank: false,
-      },
+      },*/
     },
     {
       text: "Marca",
       dataIndex: "nombre_marca",
       flex: 1,
       editor: {
-        xtype: "textfield",
+        xtype: "combobox",
         allowBlank: false,
       },
     },
@@ -66,7 +66,7 @@ Ext.define("TCSRV.view.vehiculo.VehiculoView", {
       dataIndex: "nombre_modelo",
       flex: 1,
       editor: {
-        xtype: "textfield",
+        xtype: "combobox",
         allowBlank: false,
       },
     },

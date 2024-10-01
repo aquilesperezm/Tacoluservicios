@@ -172,7 +172,7 @@ class VehiculoManager extends ApiController
                 // ------------------------------------------------- Create -------------------------------------------------------------
                 if ($_POST['action'] == 'create') {
 
-                    $codigo = $_POST['codigo'];
+                    /*$codigo = $_POST['codigo'];
                     $nombre = $_POST['nombre'];
 
                     $d = new CentroAutorizado();
@@ -180,7 +180,7 @@ class VehiculoManager extends ApiController
                     $d->codigo = $codigo;
                     $d->nombre = $nombre;
 
-                    $d->save();
+                    $d->save();*/
 
                     $resp_data = ["success" => 'true', "action" => 'create'];
                     $this->response->setStatusCode(200);
@@ -189,14 +189,14 @@ class VehiculoManager extends ApiController
                 //--------------------------------------------------- Update -------------------------------------------------------
                 else if ($_POST['action'] == 'update') {
 
-                    $record = json_decode($_POST['record_updated']);
+                   /* $record = json_decode($_POST['record_updated']);
 
                     $d = new CentroAutorizado();
                     $d = $d->get($record->id);
                     $d->codigo = $record->codigo;
                     $d->nombre = $record->nombre;
 
-                    $d->save();
+                    $d->save();*/
 
                     $resp_data = ["success" => 'true', "action" => 'update'];
                     $this->response->setStatusCode(200);
@@ -206,13 +206,13 @@ class VehiculoManager extends ApiController
 
                 else if ($_POST['action'] == 'delete') {
 
-                    $d = new CentroAutorizado();
+                  /*  $d = new CentroAutorizado();
                     $record_ids = json_decode($_POST['records_ids_delete']);
 
                     foreach ($record_ids as $id) {
                         $d = $d->get($id);
                         $d->delete();
-                    }
+                    }*/
 
                     $resp_data = ["success" => 'true', "action" => 'delete'];
                     $this->response->setStatusCode(200);

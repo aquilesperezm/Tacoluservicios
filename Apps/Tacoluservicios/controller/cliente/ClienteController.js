@@ -5,7 +5,8 @@ Ext.define("TCSRV.controller.cliente.ClienteController", {
     "cliente.ClienteView",
     "cliente.forms.ClienteForm",
     "cliente.addons.ClienteMsg",
-    "centroautorizado.addons.CentroAutorizadoComboBox",
+    "cliente.addons.ClienteComboBox",
+    
   ],
   stores: ["cliente.ClienteStore"],
 

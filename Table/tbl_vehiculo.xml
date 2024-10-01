@@ -20,6 +20,7 @@
     <column>
         <name>idmodelo</name>
         <type>integer</type>
+        <null>NO</null>
     </column>
     <column>
         <name>matricula</name>
@@ -41,6 +42,6 @@
     </constraint>
      <constraint>
         <name>fk_tbl_modelo_vehiculo_2</name>
-        <type>FOREIGN KEY (idmodelo) REFERENCES tbl_modelo_vehiculo (id) ON DELETE SET NULL ON UPDATE CASCADE</type>
+        <type>FOREIGN KEY (idmodelo) REFERENCES tbl_modelo_vehiculo (id) ON DELETE CASCADE ON UPDATE CASCADE</type>
     </constraint>
 </table>
