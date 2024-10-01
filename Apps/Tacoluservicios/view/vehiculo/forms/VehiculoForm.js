@@ -2,7 +2,6 @@ Ext.define("TCSRV.view.vehiculo.forms.VehiculoForm", {
   extend: "Ext.form.Panel",
   xtype: "vehiculo-form",
   //title: "Adicionar Centro Autorizado",
-
   defaults: {
     padding: 20,
   },
@@ -71,31 +70,34 @@ Ext.define("TCSRV.view.vehiculo.forms.VehiculoForm", {
           listeners: {
             select: (cmb, record) => {},
             change: (cmb, nv, ov) => {
-              if (nv == null) cmb.nextSibling("combobox").setDisabled(true);
+              
+              if (nv == null || nv == "")
+                cmb.nextSibling("combobox").setDisabled(true);
+              else {
+                let store_modelosvehiculo = Ext.data.StoreManager.lookup(
+                  "modelovehiculo.ModeloVehiculoStore"
+                );
 
-              let store_modelosvehiculo = Ext.data.StoreManager.lookup(
-                "modelovehiculo.ModeloVehiculoStore"
-              );
+                store_modelosvehiculo.load({
+                  callback: (records, operation, success) => {
+                    store_modelosvehiculo.clearFilter();
 
-              store_modelosvehiculo.load({
-                callback: (records, operation, success) => {
-                  store_modelosvehiculo.clearFilter();
+                    store_modelosvehiculo.addFilter([
+                      (item) => {
+                        // console.log("item: ", item);
+                        return item.data.idmarca == nv;
+                      },
+                    ]);
 
-                  store_modelosvehiculo.addFilter([
-                    (item) => {
-                      // console.log("item: ", item);
-                      return item.data.idmarca == nv;
-                    },
-                  ]);
+                    let cmb_modelo = cmb.nextSibling("combobox");
+                    cmb_modelo.setDisabled(false);
 
-                  let cmb_modelo = cmb.nextSibling("combobox");
-                  cmb_modelo.setDisabled(false);
-
-                  let r = store_modelosvehiculo.getData();
-                  // console.log(r.getAt(0).get('id'))
-                  cmb_modelo.select(r.getAt(0));
-                },
-              });
+                    let r = store_modelosvehiculo.getData();
+                    // console.log(r.getAt(0).get('id'))
+                    cmb_modelo.select(r.getAt(0));
+                  },
+                });
+              }
             },
           },
         },

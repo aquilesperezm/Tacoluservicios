@@ -64,6 +64,7 @@ Ext.define("TCSRV.controller.vehiculo.VehiculoController", {
 
     if (form_panel.getForm().isValid()) {
       form_panel.getForm().submit({
+        submitEmptyText:false,
         clientValidation: true,
         headers: { Token: "Tacoluservicios2024**" },
         params: {

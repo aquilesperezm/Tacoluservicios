@@ -172,7 +172,7 @@ class VehiculoManager extends ApiController
                 // ------------------------------------------------- Create -------------------------------------------------------------
                 if ($_POST['action'] == 'create') {
 
-                    /*$codigo = $_POST['codigo'];
+                    $codigo = $_POST['matricula'];
                     $nombre = $_POST['nombre'];
 
                     $d = new CentroAutorizado();
@@ -180,7 +180,7 @@ class VehiculoManager extends ApiController
                     $d->codigo = $codigo;
                     $d->nombre = $nombre;
 
-                    $d->save();*/
+                    $d->save();
 
                     $resp_data = ["success" => 'true', "action" => 'create'];
                     $this->response->setStatusCode(200);
