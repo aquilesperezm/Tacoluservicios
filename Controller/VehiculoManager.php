@@ -23,6 +23,21 @@ class VehiculoManager extends ApiController
 {
 
 
+    private function Vehiculo_getAllBuilded(){
+        
+        $result = [];
+        $v = new Vehiculo();
+
+        $all = $v->all();
+        foreach($all as $v){
+           $data = $this->buildModel($v,true);
+           array_push($result,$data);
+        }
+
+        return $result;
+
+    }
+
     private function buildModel($v, $ResultasObject=false){
 
         $c = new Cliente();
@@ -32,8 +47,8 @@ class VehiculoManager extends ApiController
         $a = (array) $v;  
         
         //cliente
-        $a['cifnif'] = $c->get($v->codcliente)->cifnif;
-        $a['nombre'] = $c->get($v->codcliente)->nombre;
+        $a['cifnif_cliente'] = $c->get($v->codcliente)->cifnif;
+        $a['nombre_cliente'] = $c->get($v->codcliente)->nombre;
 
         //modelo
         $a['nombre_modelo'] = $m->get($v->idmodelo)->nombre;
@@ -51,8 +66,9 @@ class VehiculoManager extends ApiController
 
         $result = [];
 
-        $ca = new Vehiculo();
-        $data = $ca->all();
+        #$ca = new Vehiculo();
+        $data = $this->Vehiculo_getAllBuilded();
+
 
         foreach ($data as $d) {
 
@@ -64,16 +80,16 @@ class VehiculoManager extends ApiController
             else if (str_contains(strtolower($d->no_chasis), strtolower($query))) {
                 array_push($result, $d);
             }
-            //cliente
-            else if (str_contains(strtolower($d->no_chasis), strtolower($query))) {
+            //cifnif cliente
+            else if (str_contains(strtolower($d->cifnif_cliente), strtolower($query))) {
                 array_push($result, $d);
             }
             //marca
-            else if (str_contains(strtolower($d->no_chasis), strtolower($query))) {
+            else if (str_contains(strtolower($d->nombre_marca), strtolower($query))) {
                 array_push($result, $d);
             } 
             //modelo
-            else if (str_contains(strtolower($d->no_chasis), strtolower($query))) {
+            else if (str_contains(strtolower($d->nombre_modelo), strtolower($query))) {
                 array_push($result, $d);
             } else continue;
         }
@@ -102,7 +118,8 @@ class VehiculoManager extends ApiController
                     $start = $_GET['start'];
                     $limit = $_GET['limit'];
 
-                    $result = $d->all();
+                    #$result = $d->all();
+                    $result = $this->Vehiculo_getAllBuilded();
 
                     $data = ["vehiculos" => array_slice($result, $start, $limit), "total" => count($result)];
                     $this->response->setStatusCode(200);
@@ -113,8 +130,10 @@ class VehiculoManager extends ApiController
 
                     $query = $_GET['query'];
 
-                    $ca = new Vehiculo();
-                    $data = $ca->all();
+                    #$ca = new Vehiculo();
+                    #$data = $ca->all();
+                    
+                    $data = $this->Vehiculo_getAllBuilded();
 
                     $result = $this->searchData($data, $query);
 
@@ -132,8 +151,10 @@ class VehiculoManager extends ApiController
 
                     $query = $_GET['query'];
 
-                    $ca = new Vehiculo();
-                    $data = $ca->all();
+                    #$ca = new Vehiculo();
+                    #$data = $ca->all();
+
+                    $data = $this->Vehiculo_getAllBuilded();
 
                     $result = $this->searchData($data, $query);
 
