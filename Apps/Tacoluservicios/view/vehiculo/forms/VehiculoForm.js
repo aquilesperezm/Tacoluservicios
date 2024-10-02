@@ -44,6 +44,7 @@ Ext.define("TCSRV.view.vehiculo.forms.VehiculoForm", {
           fieldLabel: "Fecha de Matrícula",
           //allowBlank: false,
           name: "fecha_matricula",
+          //format: 'Y-m-d',
         },
       ],
     },
@@ -66,7 +67,7 @@ Ext.define("TCSRV.view.vehiculo.forms.VehiculoForm", {
           fieldLabel:
             "<span style='color:red;'><strong>*</strong></span> Marca",
           allowBlank: false,
-          name: "marca",
+          //name: "marca",
           listeners: {
             select: (cmb, record) => {},
             change: (cmb, nv, ov) => {
@@ -94,7 +95,10 @@ Ext.define("TCSRV.view.vehiculo.forms.VehiculoForm", {
 
                     let r = store_modelosvehiculo.getData();
                     // console.log(r.getAt(0).get('id'))
+                    if(r.length > 0)
                     cmb_modelo.select(r.getAt(0));
+                    else 
+                    cmb_modelo.setValue('');
                   },
                 });
               }

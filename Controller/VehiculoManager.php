@@ -11,6 +11,8 @@ use FacturaScripts\Plugins\Tacoluservicios\Model\ModeloVehiculo;
 use FacturaScripts\Plugins\Tacoluservicios\Model\MarcaVehiculo;
 
 use FacturaScripts\Core\Model\Cliente;
+use DateTime;
+use Date;
 
 
 
@@ -23,42 +25,47 @@ class VehiculoManager extends ApiController
 {
 
 
-    private function Vehiculo_getAllBuilded(){
-        
+    private function Vehiculo_getAllBuilded()
+    {
+
         $result = [];
         $v = new Vehiculo();
 
         $all = $v->all();
-        foreach($all as $v){
-           $data = $this->buildModel($v,true);
-           array_push($result,$data);
+        foreach ($all as $v) {
+            $data = $this->buildModel($v, true);
+            array_push($result, $data);
         }
 
         return $result;
-
     }
 
-    private function buildModel($v, $ResultasObject=false){
+    private function buildModel($v, $ResultasObject = false)
+    {
 
         $c = new Cliente();
         $m = new ModeloVehiculo();
         $ma = new MarcaVehiculo();
 
-        $a = (array) $v;  
-        
+        $a = (array) $v;
+
         //cliente
-        $a['cifnif_cliente'] = $c->get($v->codcliente)->cifnif;
-        $a['nombre_cliente'] = $c->get($v->codcliente)->nombre;
+        if ($v->codcliente) {
+            $a['cifnif_cliente'] = $c->get($v->codcliente)->cifnif;
+            $a['nombre_cliente'] = $c->get($v->codcliente)->nombre;
+        } else {
+
+            $a['cifnif_cliente'] = '';
+            $a['nombre_cliente'] = '';
+        }
 
         //modelo
         $a['nombre_modelo'] = $m->get($v->idmodelo)->nombre;
-        
+
         //marca
-        $a['nombre_marca'] = $ma->get($m->get($v->idmodelo)->id)->nombre;
+        $a['nombre_marca'] = $ma->get($m->get($v->idmodelo)->idmarca)->nombre;
 
         return $ResultasObject ? (object) $a : $a;
-
-        
     }
 
     private function searchData($vehiculos, $query)
@@ -87,7 +94,7 @@ class VehiculoManager extends ApiController
             //marca
             else if (str_contains(strtolower($d->nombre_marca), strtolower($query))) {
                 array_push($result, $d);
-            } 
+            }
             //modelo
             else if (str_contains(strtolower($d->nombre_modelo), strtolower($query))) {
                 array_push($result, $d);
@@ -132,7 +139,7 @@ class VehiculoManager extends ApiController
 
                     #$ca = new Vehiculo();
                     #$data = $ca->all();
-                    
+
                     $data = $this->Vehiculo_getAllBuilded();
 
                     $result = $this->searchData($data, $query);
@@ -172,15 +179,24 @@ class VehiculoManager extends ApiController
                 // ------------------------------------------------- Create -------------------------------------------------------------
                 if ($_POST['action'] == 'create') {
 
-                    $codigo = $_POST['matricula'];
-                    $nombre = $_POST['nombre'];
+                                   
+                    $matricula = $_POST['matricula'];
+                    $no_chasis = $_POST['no_chasis'];
+                    $fecha_matricula = (new DateTime($_POST['fecha_matricula']))->format('m-d-Y');
+                    $cliente  = ($_POST['codcliente'] != '') ? $_POST['codcliente'] : null;
+                    $modelo = $_POST['modelo'];
+                    $comentarios = $_POST['comentarios'];
 
-                    $d = new CentroAutorizado();
+                    $v = new Vehiculo();
 
-                    $d->codigo = $codigo;
-                    $d->nombre = $nombre;
+                    $v->matricula = $matricula;
+                    $v->no_chasis = $no_chasis;
+                    $v->fecha_matricula = $fecha_matricula;
+                    $v->codcliente = $cliente;
+                    $v->idmodelo = $modelo;
+                    $v->comentario = $comentarios;
 
-                    $d->save();
+                    $v->save();
 
                     $resp_data = ["success" => 'true', "action" => 'create'];
                     $this->response->setStatusCode(200);
@@ -189,7 +205,7 @@ class VehiculoManager extends ApiController
                 //--------------------------------------------------- Update -------------------------------------------------------
                 else if ($_POST['action'] == 'update') {
 
-                   /* $record = json_decode($_POST['record_updated']);
+                    /* $record = json_decode($_POST['record_updated']);
 
                     $d = new CentroAutorizado();
                     $d = $d->get($record->id);
@@ -206,7 +222,7 @@ class VehiculoManager extends ApiController
 
                 else if ($_POST['action'] == 'delete') {
 
-                  /*  $d = new CentroAutorizado();
+                    /*  $d = new CentroAutorizado();
                     $record_ids = json_decode($_POST['records_ids_delete']);
 
                     foreach ($record_ids as $id) {

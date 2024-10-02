@@ -59,6 +59,7 @@ Ext.define("TCSRV.controller.vehiculo.VehiculoController", {
   },
 
   onClickGuardarNewVehiculo: (btn, e) => {
+
     let window = btn.up("window");
     let form_panel = window.down("form");
 
@@ -71,10 +72,18 @@ Ext.define("TCSRV.controller.vehiculo.VehiculoController", {
           action: "create",
         },
         success: function (form, action) {
-          window.close();
           Ext.StoreManager.lookup(
             "vehiculo.VehiculoStore"
-          ).load();
+          ).load({
+            callback:()=>{
+             
+              window.close();
+              let store_modelosvehiculo = Ext.data.StoreManager.lookup(
+                "modelovehiculo.ModeloVehiculoStore"
+              );
+              store_modelosvehiculo.clearFilter();
+            }
+          });
         },
         failure: function (form, action) {},
       });

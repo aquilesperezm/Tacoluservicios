@@ -30,8 +30,8 @@ Ext.define("TCSRV.view.vehiculo.VehiculoView", {
       dataIndex: "fecha_matricula",
       flex: 1,
       editor: {
-        xtype: "textfield",
-        allowBlank: false,
+        xtype: "datefield",
+        //allowBlank: false,
       },
     },
     {
@@ -40,7 +40,7 @@ Ext.define("TCSRV.view.vehiculo.VehiculoView", {
       flex: 1,
       editor: {
         xtype: "combobox",
-        allowBlank: false,
+        //allowBlank: false,
       },
     },
     {
@@ -76,7 +76,6 @@ Ext.define("TCSRV.view.vehiculo.VehiculoView", {
       flex: 3,
       editor: {
         xtype: "textfield",
-        allowBlank: false,
       },
     }
   ],
