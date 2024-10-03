@@ -6,14 +6,14 @@ Ext.define("TCSRV.controller.vehiculo.VehiculoController", {
     "vehiculo.forms.VehiculoForm",
     "vehiculo.addons.VehiculoMsg",
   ],
-  stores: [
-    "vehiculo.VehiculoStore"
-  ],
+  stores: ["vehiculo.VehiculoStore"],
 
   control: {
     'vehiculo-grid toolbar[dock="top"] textfield[fieldLabel="Buscar"]': {
       beforerender: (cmp) => {
-        cmp.setEmptyText('Buscar por: Matrícula, Número de Chasis, ID Cliente, Marca o Modelo')
+        cmp.setEmptyText(
+          "Buscar por: Matrícula, Número de Chasis, ID Cliente, Marca o Modelo"
+        );
       },
     },
 
@@ -59,35 +59,31 @@ Ext.define("TCSRV.controller.vehiculo.VehiculoController", {
   },
 
   onClickGuardarNewVehiculo: (btn, e) => {
-
     let window = btn.up("window");
     let form_panel = window.down("form");
 
     if (form_panel.getForm().isValid()) {
       form_panel.getForm().submit({
-        submitEmptyText:false,
+        submitEmptyText: false,
         clientValidation: true,
         headers: { Token: "Tacoluservicios2024**" },
         params: {
           action: "create",
         },
         success: function (form, action) {
-          Ext.StoreManager.lookup(
-            "vehiculo.VehiculoStore"
-          ).load({
-            callback:()=>{
-             
+          Ext.StoreManager.lookup("vehiculo.VehiculoStore").load({
+            callback: () => {
               window.close();
               let store_modelosvehiculo = Ext.data.StoreManager.lookup(
                 "modelovehiculo.ModeloVehiculoStore"
               );
               store_modelosvehiculo.clearFilter();
-            }
+            },
           });
         },
         failure: function (form, action) {},
       });
-    } else Ext.Msg.alert("Error de Validación","Los campos deben ser válidos");
+    } else Ext.Msg.alert("Error de Validación", "Los campos deben ser válidos");
   },
 
   // url: "api/3/get_vehiculos",
@@ -103,9 +99,9 @@ Ext.define("TCSRV.controller.vehiculo.VehiculoController", {
 
     if (selection.length > 0) {
       Ext.Msg.show({
-        title: "Eliminar Centros Autorizados",
+        title: "Eliminar Vehículos",
         message:
-          "Usted desea eliminar los Centros Autorizados seleccionados, ¿Está segur@?",
+          "Usted desea eliminar los Vehículos seleccionados, ¿Está segur@?",
         buttons: Ext.Msg.YESNO,
         icon: Ext.Msg.WARNING,
         fn: function (btn) {
@@ -186,12 +182,21 @@ Ext.define("TCSRV.controller.vehiculo.VehiculoController", {
     let grid = context.grid;
     let store = grid.getStore();
 
+    //console.log(context.record.modified)
+    //context.record.set('nombre_marca',context.record.modified.nombre_marca)
+    // context.record.set('nombre_modelo',context.record.modified.nombre_modelo)
+    //context.record.set('idmodelo',context.newValues.nombre_modelo)
+
+     console.log(context)
+  
+
     Ext.Ajax.request({
       method: "POST",
       headers: { Token: "Tacoluservicios2024**" },
       url: "api/3/vehiculo_manager",
       params: {
         action: "update",
+        id: context.record.data.id,
         record_updated: Ext.encode(context.record.data),
       },
       success: (response) => {
@@ -199,6 +204,8 @@ Ext.define("TCSRV.controller.vehiculo.VehiculoController", {
       },
       failure: (response) => {},
     });
+
+    
   },
 
   init: (app) => {},

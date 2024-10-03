@@ -18,7 +18,7 @@ class Vehiculo extends ModelClass
     /** @var int */
     public $id;
 
-    /** @var int */
+    /** @var string */
     public $codcliente;
 
     /** @var int */

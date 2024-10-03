@@ -108,7 +108,7 @@ class VehiculoManager extends ApiController
     protected function runResource(): void
     {
 
-        $d = new Vehiculo();
+        $v = new Vehiculo();
 
         //----------------------------------------------- Method Get: Read and Search ------------------------------------------------
         if ($this->request->isMethod('GET')) {
@@ -179,7 +179,7 @@ class VehiculoManager extends ApiController
                 // ------------------------------------------------- Create -------------------------------------------------------------
                 if ($_POST['action'] == 'create') {
 
-                                   
+
                     $matricula = $_POST['matricula'];
                     $no_chasis = $_POST['no_chasis'];
                     $fecha_matricula = (new DateTime($_POST['fecha_matricula']))->format('m-d-Y');
@@ -205,30 +205,47 @@ class VehiculoManager extends ApiController
                 //--------------------------------------------------- Update -------------------------------------------------------
                 else if ($_POST['action'] == 'update') {
 
-                    /* $record = json_decode($_POST['record_updated']);
+                    $record = json_decode($_POST['record_updated']);
+                    $id = $_POST['id'];
 
-                    $d = new CentroAutorizado();
-                    $d = $d->get($record->id);
-                    $d->codigo = $record->codigo;
-                    $d->nombre = $record->nombre;
+                    $v = new Vehiculo();
+                    $v = $v->get($id);
 
-                    $d->save();*/
+                  /*  if (isset($record->matricula))
+                        $v->matricula = $record->matricula;
 
-                    $resp_data = ["success" => 'true', "action" => 'update'];
-                    $this->response->setStatusCode(200);
-                    $this->response->setContent(json_encode($resp_data));
+                    if (isset($record->no_chasis))
+                        $v->no_chasis = $record->no_chasis;
+
+                    $v->fecha_matricula = (new DateTime($record->fecha_matricula))->format('d-m-Y');
+                    $v->idmodelo = $record->nombre_modelo;
+                    $v->codcliente = $record->codcliente;
+                    $v->comentario = $record->comentario;
+
+                    $r = $v->save();*/
+                    $r = true;
+
+                    if ($r) {
+                        $resp_data = ["success" => $r, "action" => 'update'];
+                        $this->response->setStatusCode(200);
+                        $this->response->setContent(json_encode($resp_data));
+                    } else {
+                        $resp_data = ["success" => $r, "action" => 'update'];
+                        $this->response->setStatusCode(400);
+                        $this->response->setContent(json_encode($resp_data));
+                    }
                 }
                 //----------------------------------------------------- Delete ------------------------------------------------
 
                 else if ($_POST['action'] == 'delete') {
 
-                    /*  $d = new CentroAutorizado();
+                    $v = new Vehiculo();
                     $record_ids = json_decode($_POST['records_ids_delete']);
 
                     foreach ($record_ids as $id) {
-                        $d = $d->get($id);
-                        $d->delete();
-                    }*/
+                        $v = $v->get($id);
+                        $v->delete();
+                    }
 
                     $resp_data = ["success" => 'true', "action" => 'delete'];
                     $this->response->setStatusCode(200);
