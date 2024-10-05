@@ -130,6 +130,10 @@ class Init extends InitClass
         //Vehiculo
         Kernel::addRoute('/api/3/vehiculo_manager', 'VehiculoManager', -1);
         ApiRoot::addCustomResource('vehiculo_manager');
+
+        //Modelos de Tacografos
+        Kernel::addRoute('/api/3/modelotacografo_manager', 'ModeloTacografoManager', -1);
+        ApiRoot::addCustomResource('modelotacografo_manager');
     }
 
     public function uninstall(): void

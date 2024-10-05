@@ -10,7 +10,8 @@ Ext.application({
     "tipointervencion.TipoIntervencionController",
     "marcavehiculo.MarcaVehiculoController",
     "modelovehiculo.ModeloVehiculoController",
-    "vehiculo.VehiculoController"
+    "vehiculo.VehiculoController",
+    "modelotacografo.ModeloTacografoController"
 
   ],
 
