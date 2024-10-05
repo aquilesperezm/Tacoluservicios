@@ -153,18 +153,84 @@ Ext.define("TCSRV.controller.vehiculo.VehiculoController", {
             defaults: {
               padding: 20,
             },
+            layout: {
+              type: "table",
+              columns: 3,
+            },
             items: [
               {
-                xtype: "displayfield",
-                fieldLabel: "Código",
-                value: selection[0].data.codigo,
+                xtype: "container",
+                defaults: {
+                  padding: 10,
+                  labelWidth:200
+                },
+                items: [
+                  {
+                    xtype: "displayfield",
+                    fieldLabel: "<b>Matrícula</b>",
+                    name: "matricula",
+                  },
+                  {
+                    xtype: "displayfield",
+                    fieldLabel: "<b>Número de Chasis</b>",
+                    name: "no_chasis",
+                  },
+                  {
+                    xtype: "displayfield",
+                    fieldLabel: "<b>Fecha de Matrícula</b>",
+                    name: "fecha_matricula",
+                    renderer: (value, field) => {
+                      let dt = new Date(value);
+                      return Ext.Date.format(dt, "d-m-Y");
+                    },
+                  },
+                ],
               },
               {
-                xtype: "displayfield",
-                fieldLabel: "Nombre",
-                value: selection[0].data.nombre,
+                xtype: "container",
+                defaults: {
+                  padding: 20,
+                },
+                items: [
+                  {
+                    xtype: "displayfield",
+                    fieldLabel: "<b>Cliente</b>",
+                    name:'nombre_cliente'
+                  },
+                  {
+                    xtype: "displayfield",
+                    fieldLabel: "<b>Marca</b>",
+                    name:'nombre_marca'
+                  },
+                  {
+                    xtype: "displayfield",
+                    fieldLabel: "<b>Modelo</b>",
+                    name:'nombre_modelo'
+                  },
+                ],
+              },
+              {
+                xtype: "container",
+                rowspan: 3,
+                defaults: {
+                  padding: 0,
+                },
+                items: [
+                  {
+                    xtype: "textarea",
+                    editable: false,
+                    fieldLabel: "<b>Comentarios</b>",
+                    height: 130,
+                    name:'comentario'
+                  },
+                ],
               },
             ],
+            listeners: {
+              beforerender: (cmp) => {
+                cmp.loadRecord(selection[0]);
+              },
+            },
           },
         ],
       }).show();
@@ -182,13 +248,8 @@ Ext.define("TCSRV.controller.vehiculo.VehiculoController", {
     let grid = context.grid;
     let store = grid.getStore();
 
-    //console.log(context.record.modified)
-    //context.record.set('nombre_marca',context.record.modified.nombre_marca)
-    // context.record.set('nombre_modelo',context.record.modified.nombre_modelo)
-    //context.record.set('idmodelo',context.newValues.nombre_modelo)
+    context.record.data.comentario = context.newValues.comentario;
 
-     console.log('context: ',context)
-  
     Ext.Ajax.request({
       method: "POST",
       headers: { Token: "Tacoluservicios2024**" },
@@ -202,8 +263,6 @@ Ext.define("TCSRV.controller.vehiculo.VehiculoController", {
       },
       failure: (response) => {},
     });
-
-    
   },
 
   init: (app) => {},

@@ -7,11 +7,11 @@ Ext.define("TCSRV.view.centroautorizado.addons.CentroAutorizadoMsg", {
   icon: this.QUESTION,
   fn: function (btn) {
     if (btn === "yes") {
-      console.log("Yes pressed");
+     // console.log("Yes pressed");
     } else if (btn === "no") {
-      console.log("No pressed");
+     // console.log("No pressed");
     } else {
-      console.log("Cancel pressed");
+     // console.log("Cancel pressed");
     }
   },
 });
