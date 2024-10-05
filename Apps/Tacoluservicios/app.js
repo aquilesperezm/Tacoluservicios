@@ -11,7 +11,8 @@ Ext.application({
     "marcavehiculo.MarcaVehiculoController",
     "modelovehiculo.ModeloVehiculoController",
     "vehiculo.VehiculoController",
-    "modelotacografo.ModeloTacografoController"
+    "modelotacografo.ModeloTacografoController",
+    "categoriatacografo.CategoriaTacografoController"
 
   ],
 
