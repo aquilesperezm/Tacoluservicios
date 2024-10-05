@@ -187,16 +187,14 @@ Ext.define("TCSRV.controller.vehiculo.VehiculoController", {
     // context.record.set('nombre_modelo',context.record.modified.nombre_modelo)
     //context.record.set('idmodelo',context.newValues.nombre_modelo)
 
-     console.log(context)
+     console.log('context: ',context)
   
-
     Ext.Ajax.request({
       method: "POST",
       headers: { Token: "Tacoluservicios2024**" },
       url: "api/3/vehiculo_manager",
       params: {
         action: "update",
-        id: context.record.data.id,
         record_updated: Ext.encode(context.record.data),
       },
       success: (response) => {

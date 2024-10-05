@@ -206,24 +206,18 @@ class VehiculoManager extends ApiController
                 else if ($_POST['action'] == 'update') {
 
                     $record = json_decode($_POST['record_updated']);
-                    $id = $_POST['id'];
-
+                    
                     $v = new Vehiculo();
-                    $v = $v->get($id);
+                    $v = $v->get($record->id);
 
-                  /*  if (isset($record->matricula))
-                        $v->matricula = $record->matricula;
-
-                    if (isset($record->no_chasis))
-                        $v->no_chasis = $record->no_chasis;
-
+                    $v->matricula = $record->matricula;
+                    $v->no_chasis = $record->no_chasis;
                     $v->fecha_matricula = (new DateTime($record->fecha_matricula))->format('d-m-Y');
-                    $v->idmodelo = $record->nombre_modelo;
                     $v->codcliente = $record->codcliente;
+                    $v->idmodelo = $record->idmodelo;
                     $v->comentario = $record->comentario;
 
-                    $r = $v->save();*/
-                    $r = true;
+                    $r = $v->save();
 
                     if ($r) {
                         $resp_data = ["success" => $r, "action" => 'update'];
