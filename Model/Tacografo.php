@@ -42,6 +42,10 @@ class Tacografo extends ModelClass
     /** @var string */
     public $no_serie;
 
+    /** @var int */
+    public $idvehiculo;
+
+
     public function clear() 
     {
         parent::clear();

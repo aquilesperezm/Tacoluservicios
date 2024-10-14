@@ -43,20 +43,33 @@
         <type>integer</type>
     </column>
     <column>
+        <name>idvehiculo</name>
+        <type>integer</type>
+    </column>
+    <column>
         <name>no_serie</name>
         <type>character varying(150)</type>
         <null>NO</null>
     </column>
+
     <constraint>
         <name>tbl_tacografo_pkey</name>
         <type>PRIMARY KEY (id)</type>
     </constraint>
+
      <constraint>
         <name>fk_tbl_modelo_tacografo_1</name>
         <type>FOREIGN KEY (idmodelo) REFERENCES tbl_modelo_tacografo (id) ON DELETE SET NULL ON UPDATE CASCADE</type>
     </constraint>
+
     <constraint>
-        <name>fk_tbl_modelo_tacografo_2</name>
+        <name>fk_tbl_vehiculo_1</name>
+        <type>FOREIGN KEY (idvehiculo) REFERENCES tbl_vehiculo (id) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+
+    <constraint>
+        <name>fk_tbl_categoria_tacografo_2</name>
         <type>FOREIGN KEY (idcategoria) REFERENCES tbl_categoria_tacografo (id) ON DELETE SET NULL ON UPDATE CASCADE</type>
     </constraint>
+
 </table>
