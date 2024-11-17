@@ -19,7 +19,6 @@ use DateTime;
 use Date;
 
 
-
 /**
  * Un controlador es básicamente una página o una opción del menú de FacturaScripts.
  *
@@ -28,27 +27,11 @@ use Date;
 class TacografoManager extends ApiController
 {
 
-     /*
-        fields:
-        
-        id
-        no_serie
-        id_vehiculo
-        id_modelo
-        id_categoria
-        escala_velocidad
-        fecha_fabricacion
-        fecha_fin_garantia
-        fecha_instalacion
-        fecha_ultima_revision
-        homologacion
-        comentario     
-      */
-
     /**
-     *
+     * Funcion encargada de convertir todos las propiedades del objeto en un arreglo
+     * @return array
      */
-    private function Tacografo_getAllBuilded()
+    private function Tacografo_getAllBuilded(): array
     {
 
         $result = [];
@@ -63,17 +46,17 @@ class TacografoManager extends ApiController
         return $result;
     }
 
-   /**
-    * Funcion encargada de crear un resultado conjuntamente con las dependencias
-    * de este objeto, similar al JOIN
-    *
-    * @param object $tacografo objeto para resolver las dependencias
-    * @param bool $ResultasObject Si deseamos obtener un objeto o no (default=false)
-    * @return array | object
-    *
-    * @author Aquiles Perez Miranda
-    */
-    private function buildModel_Dependencies($tacografo, $ResultasObject = false)
+    /**
+     * Funcion encargada de crear un resultado conjuntamente con las dependencias
+     * de este objeto, similar al JOIN
+     *
+     * @param object $tacografo objeto para resolver las dependencias
+     * @param bool $ResultasObject Si deseamos obtener un objeto o no (default=false)
+     * @return array | object
+     *
+     * @author Aquiles Perez Miranda
+     */
+    private function buildModel_Dependencies(object $tacografo, bool $ResultasObject = false): object
     {
 
 
@@ -82,7 +65,7 @@ class TacografoManager extends ApiController
         $categoria_tacografo = new CategoriaTacografo();
         $vehiculo = new Vehiculo();
 
-        $a = (array) $tacografo;
+        $a = (array)$tacografo;
 
         //modelo del tacografo
         $a['nombre_modelo'] = $modelo_tacografo->get($tacografo->idmodelo)->nombre;
@@ -95,25 +78,29 @@ class TacografoManager extends ApiController
         $a['no_chasis'] = $vehiculo->get($tacografo->idvehiculo)->no_chasis;
 
 
-        return $ResultasObject ? (object) $a : $a;
+        return $ResultasObject ? (object)$a : $a;
     }
 
-    private function searchData($vehiculos, $query)
+    /**
+     * Funcion para buscar datos en el arreglo de objetos segun el tipo
+     * @param string $query cadena de busqueda
+     *
+     * @return array valores obtenidos que seran convertidos a json
+     */
+    private function searchData(string $query): array
     {
 
         $result = [];
 
-        #$ca = new Vehiculo();
         $data = $this->Tacografo_getAllBuilded();
-
 
         foreach ($data as $d) {
 
             //no_serie
-            if (str_contains(strtolower($d->matricula), strtolower($query))) {
+            if (str_contains(strtolower($d->no_serie), strtolower($query))) {
                 array_push($result, $d);
-            }
-
+            } else continue;
+            /*
             //matricula
             if (str_contains(strtolower($d->matricula), strtolower($query))) {
                 array_push($result, $d);
@@ -133,7 +120,7 @@ class TacografoManager extends ApiController
             //modelo
             else if (str_contains(strtolower($d->nombre_modelo), strtolower($query))) {
                 array_push($result, $d);
-            } else continue;
+            } else continue;*/
         }
 
         return $result;
@@ -143,14 +130,11 @@ class TacografoManager extends ApiController
     protected function runResource(): void
     {
 
-        $tacografos = new Tacografo();
-
         //----------------------------------------------- Method Get: Read and Search ------------------------------------------------
         if ($this->request->isMethod('GET')) {
 
             //------------------------------------------------------------- Read ---------------------------------------------------
             if ($_GET['action'] == 'read') {
-
 
                 $query = isset($_GET['query']) ? $_GET['query'] : null;
 
@@ -160,29 +144,22 @@ class TacografoManager extends ApiController
                     $start = $_GET['start'];
                     $limit = $_GET['limit'];
 
-
                     $result = $this->Tacografo_getAllBuilded();
 
                     $data = ["tacografos" => array_slice($result, $start, $limit), "total" => count($result)];
                     $this->response->setStatusCode(200);
                     $this->response->setContent(json_encode($data));
-                }
-                //---------------------------------------- Reading and Search from combobox ---------------------------------------
+                } //---------------------------------------- Reading and Search from combobox ---------------------------------------
                 else {
 
                     $query = $_GET['query'];
 
-                    #$ca = new Vehiculo();
-                    #$data = $ca->all();
-
-                    $data = $this->Tacografo_getAllBuilded();
-
-                    $result = $this->searchData($data, $query);
+                    $result = $this->searchData($query);
 
                     $start = $_GET['start'];
                     $limit = $_GET['limit'];
 
-                    $resp_data = ["vehiculos" => array_slice($result, $start, $limit), "total" => count($result)];
+                    $resp_data = ["tacografos" => array_slice($result, $start, $limit), "total" => count($result)];
                     $this->response->setStatusCode(200);
                     $this->response->setContent(json_encode($resp_data));
                 }
@@ -193,17 +170,12 @@ class TacografoManager extends ApiController
 
                     $query = $_GET['query'];
 
-                    #$ca = new Vehiculo();
-                    #$data = $ca->all();
-
-                    $data = $this->Tacografo_getAllBuilded();
-
-                    $result = $this->searchData($data, $query);
+                    $result = $this->searchData($query);
 
                     $start = $_GET['start'];
                     $limit = $_GET['limit'];
 
-                    $resp_data = ["vehiculos" => array_slice($result, $start, $limit), "total" => count($result)];
+                    $resp_data = ["tacografos" => array_slice($result, $start, $limit), "total" => count($result)];
                     $this->response->setStatusCode(200);
                     $this->response->setContent(json_encode($resp_data));
                 }
@@ -218,7 +190,7 @@ class TacografoManager extends ApiController
                     $matricula = $_POST['matricula'];
                     $no_chasis = $_POST['no_chasis'];
                     $fecha_matricula = (new DateTime($_POST['fecha_matricula']))->format('m-d-Y');
-                    $cliente  = ($_POST['codcliente'] != '') ? $_POST['codcliente'] : null;
+                    $cliente = ($_POST['codcliente'] != '') ? $_POST['codcliente'] : null;
                     $modelo = $_POST['modelo'];
                     $comentarios = $_POST['comentarios'];
 
@@ -236,12 +208,11 @@ class TacografoManager extends ApiController
                     $resp_data = ["success" => 'true', "action" => 'create'];
                     $this->response->setStatusCode(200);
                     $this->response->setContent(json_encode($resp_data));
-                }
-                //--------------------------------------------------- Update -------------------------------------------------------
+                } //--------------------------------------------------- Update -------------------------------------------------------
                 else if ($_POST['action'] == 'update') {
 
                     $record = json_decode($_POST['record_updated']);
-                    
+
                     $tacografos = new Vehiculo();
                     $tacografos = $tacografos->get($record->id);
 
@@ -263,8 +234,7 @@ class TacografoManager extends ApiController
                         $this->response->setStatusCode(400);
                         $this->response->setContent(json_encode($resp_data));
                     }
-                }
-                //----------------------------------------------------- Delete ------------------------------------------------
+                } //----------------------------------------------------- Delete ------------------------------------------------
 
                 else if ($_POST['action'] == 'delete') {
 
