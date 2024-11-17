@@ -45,7 +45,9 @@ class TacografoManager extends ApiController
         comentario     
       */
 
-
+    /**
+     *
+     */
     private function Tacografo_getAllBuilded()
     {
 
@@ -54,15 +56,26 @@ class TacografoManager extends ApiController
 
         $all = $t->all();
         foreach ($all as $t) {
-            $data = $this->buildModel($t, true);
+            $data = $this->buildModel_Dependencies($t, true);
             array_push($result, $data);
         }
 
         return $result;
     }
 
-    private function buildModel($tacografo, $ResultasObject = false)
+   /**
+    * Funcion encargada de crear un resultado conjuntamente con las dependencias
+    * de este objeto, similar al JOIN
+    *
+    * @param object $tacografo objeto para resolver las dependencias
+    * @param bool $ResultasObject Si deseamos obtener un objeto o no (default=false)
+    * @return array | object
+    *
+    * @author Aquiles Perez Miranda
+    */
+    private function buildModel_Dependencies($tacografo, $ResultasObject = false)
     {
+
 
         $c = new Cliente();
         $modelo_tacografo = new ModeloTacografo();
@@ -70,7 +83,7 @@ class TacografoManager extends ApiController
         $vehiculo = new Vehiculo();
 
         $a = (array) $tacografo;
-        
+
         //modelo del tacografo
         $a['nombre_modelo'] = $modelo_tacografo->get($tacografo->idmodelo)->nombre;
 
@@ -95,6 +108,11 @@ class TacografoManager extends ApiController
 
 
         foreach ($data as $d) {
+
+            //no_serie
+            if (str_contains(strtolower($d->matricula), strtolower($query))) {
+                array_push($result, $d);
+            }
 
             //matricula
             if (str_contains(strtolower($d->matricula), strtolower($query))) {
@@ -142,7 +160,7 @@ class TacografoManager extends ApiController
                     $start = $_GET['start'];
                     $limit = $_GET['limit'];
 
-                    //$result = $tacografos->all();
+
                     $result = $this->Tacografo_getAllBuilded();
 
                     $data = ["tacografos" => array_slice($result, $start, $limit), "total" => count($result)];
