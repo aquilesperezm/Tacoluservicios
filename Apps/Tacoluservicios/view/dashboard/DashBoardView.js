@@ -10,6 +10,7 @@ Ext.define("TCSRV.view.dashboard.DashBoardView", {
     },
     {
       region: "center",
+      id:'panel_central',
       toolbar: "",
       title: "TACOLUSERVICIOS 1.00",
       tbar: [
@@ -25,15 +26,18 @@ Ext.define("TCSRV.view.dashboard.DashBoardView", {
               
               {
                 text: "Centros Autorizados",
+                id:'menu_principal_centroautorizado'
 
                 // width:150
               },{
                 text: "Clientes",
+                id:'menu_principal_clientes'
 
                 // width:150
               },
               {
                 text: "Tipos de Intervenciones",
+                id:'menu_principal_tipointervenciones'
                 //  width:150
               },
               {

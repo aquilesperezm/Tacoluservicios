@@ -1,6 +1,7 @@
 Ext.define("TCSRV.store.centroautorizado.CentroAutorizadoStore", {
   extend: "Ext.data.Store",
   model: "TCSRV.model.centroautorizado.CentroAutorizadoModel",
+  
   proxy: {
     headers: { Token: "Tacoluservicios2024**" },
     type: "ajax",
