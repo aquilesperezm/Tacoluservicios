@@ -44,7 +44,7 @@ Ext.define("TCSRV.view.vehiculo.forms.VehiculoForm", {
           fieldLabel: "Fecha de Matrícula",
           //allowBlank: false,
           name: "fecha_matricula",
-          //format: 'Y-m-d',
+          format: 'd-m-Y',
         },
       ],
     },

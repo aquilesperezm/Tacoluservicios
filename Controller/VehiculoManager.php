@@ -182,7 +182,9 @@ class VehiculoManager extends ApiController
 
                     $matricula = $_POST['matricula'];
                     $no_chasis = $_POST['no_chasis'];
-                    $fecha_matricula = (new DateTime($_POST['fecha_matricula']))->format('m-d-Y');
+                   
+                    $fecha_matricula = (new DateTime($_POST['fecha_matricula']))->format('Y-m-d');
+                   
                     $cliente  = ($_POST['codcliente'] != '') ? $_POST['codcliente'] : null;
                     $modelo = $_POST['modelo'];
                     $comentarios = $_POST['comentarios'];

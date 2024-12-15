@@ -5,6 +5,7 @@ Ext.define("TCSRV.model.vehiculo.VehiculoModel", {
     { name: "matricula", type: "string" },
     { name: "no_chasis", type: "string" },
     { name: "fecha_matricula", type: "date" , dateFormat:'d-m-Y'},
+    //{ name: "fecha_matricula", type: "date"},
 
     { name: "codcliente", type: "string" },
     { name: "nombre_cliente", type: "string" },

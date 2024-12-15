@@ -45,7 +45,7 @@ Ext.define("TCSRV.controller.categoriatacografo.CategoriaTacografoController", {
       draggable: false,
       resizable: false,
       modal: true,
-      title: "Adicionar una nueva Marca de Vehículo",
+      title: "Adicionar una nueva Categoría de Tacografo",
       items: [
         {
           xtype: "categoriatacografo-form",
@@ -95,9 +95,9 @@ Ext.define("TCSRV.controller.categoriatacografo.CategoriaTacografoController", {
 
     if (selection.length > 0) {
       Ext.Msg.show({
-        title: "Eliminar Tipos de Intervenciones",
+        title: "Eliminar Categorias de Tacografos",
         message:
-          "Usted desea eliminar las Marcas de Vehículos seleccionadas, ¿Está segur@?",
+          "Usted desea eliminar las Categorias de Tacografos seleccionadas, ¿Está segur@?",
         buttons: Ext.Msg.YESNO,
         icon: Ext.Msg.WARNING,
         fn: function (btn) {
@@ -127,7 +127,7 @@ Ext.define("TCSRV.controller.categoriatacografo.CategoriaTacografoController", {
     } else {
       Ext.Msg.show({
         title: "Error",
-        message: "Debe seleccionar al menos una Marca de Vehículo",
+        message: "Debe seleccionar al menos una Cateogoria de Tacografo",
         buttons: Ext.Msg.OK,
         icon: Ext.Msg.ERROR,
       });
@@ -167,7 +167,7 @@ Ext.define("TCSRV.controller.categoriatacografo.CategoriaTacografoController", {
     } else {
       Ext.Msg.show({
         title: "Error",
-        message: "Debe seleccionar un única Marca de Vehículo",
+        message: "Debe seleccionar una única Categoria de Tacografo",
         buttons: Ext.Msg.OK,
         icon: Ext.Msg.ERROR,
       });
