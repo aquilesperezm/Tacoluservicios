@@ -49,12 +49,15 @@ Ext.define("TCSRV.view.dashboard.DashBoardView", {
                   items: [
                     {
                       text: "Marcas",
+                      id:'menu_principal_vehiculos_marcas'
                     },
                     {
                       text: "Modelos",
+                      id:'menu_principal_vehiculos_modelos'
                     },
                     {
                       text: "Vehiculos",
+                      id:'menu_principal_vehiculos'
                     },
                   ],
                 },
@@ -69,12 +72,15 @@ Ext.define("TCSRV.view.dashboard.DashBoardView", {
                   items: [
                     {
                       text: "Modelos de Tacógrafos",
+                      id:'menu_principal_tacografos_modelo'
                     },
                     {
                       text: "Categorías de Tacógrafos",
+                      id:'menu_principal_tacografos_categoria'
                     },
                     {
                       text: "Tacógrafos",
+                      id:'menu_principal_tacografos'
                     },
                   ],
                 },
