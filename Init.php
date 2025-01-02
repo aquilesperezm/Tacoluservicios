@@ -30,6 +30,8 @@ use FacturaScripts\Plugins\Tacoluservicios\Model\TipoIntervencion;
 use FacturaScripts\Core\Controller\ApiRoot;
 use FacturaScripts\Core\Kernel;
 
+use FacturaScripts\Plugin;
+
 /**
  * Los plugins pueden contener un archivo Init.php en el que se definen procesos a ejecutar
  * cada vez que carga FacturaScripts o cuando se instala o actualiza el plugin.
@@ -38,12 +40,19 @@ use FacturaScripts\Core\Kernel;
  */
 class Init extends InitClass
 {
+    private $db;
+
+    function __construct()
+    {
+        $this->db = new DataBase();
+    }
+
     public function init(): void
     {
         // se ejecuta cada vez que carga FacturaScripts (si este plugin está activado).
 
         //verificar si tiene la estructura creada
-        $db = new DataBase();
+
 
         $centro_autorizado = new CentroAutorizado();
         $custom_cliente = new CustomCliente();
@@ -60,49 +69,64 @@ class Init extends InitClass
         $orden = new OrdenTrabajo();
         $tipointervencion_x_ordentrabajo = new TipoIntervencionXOrdenTrabajo();
 
-        $result = $db->getColumns('clientes');
-        $foreing_keys = $db->getConstraints('clientes');
 
-        $exist_column_idcentroautorizado = array_key_exists('id_centroautorizado', $result);
+        if (is_plugin_active('Tacoluservicios')) {
+            Tools::log()->info('Relación Centro Autorizado - Clientes Creada');
 
-        $exist_fk_clientes_centroautorizado = false;
-        foreach ($foreing_keys as $key) {
-            if ($key['name'] == 'clientes_fk1') {
-                $exist_fk_clientes_centroautorizado = true;
-                break;
+        } else Tools::log()->info('Relación Centro Autorizado - Clientes Creada');
+
+        //----------------------------------- Centro Autorizado ---------------------------------------------
+        if (!$this->db->tableExists('tbl_centroautorizado')) {
+
+            $this->db->exec("CREATE TABLE tbl_centroautorizado (codigo VARCHAR(50) COLLATE utf8mb4_unicode_520_ci 
+            NOT NULL, id INTEGER(11) NOT NULL AUTO_INCREMENT, nombre VARCHAR(150) COLLATE utf8mb4_unicode_520_ci 
+            NOT NULL,PRIMARY KEY USING BTREE (id)) ENGINE=InnoDB AUTO_INCREMENT=1 ROW_FORMAT=DYNAMIC CHARACTER 
+            SET 'utf8mb4' COLLATE 'utf8mb4_unicode_520_ci'");
+
+
+            if (!$this->exist_column_name('clientes', 'id_centroautorizado')) {
+                $this->db->exec('ALTER TABLE clientes ADD COLUMN id_centroautorizado INTEGER AFTER web; ');
+                if (!$this->exist_foreign_key('clientes', 'clientes_fk1'))
+                    $this->db->exec('ALTER TABLE clientes ADD CONSTRAINT clientes_fk1 FOREIGN KEY (id_centroautorizado) REFERENCES tbl_centroautorizado (id) ON DELETE SET NULL ON UPDATE CASCADE');
+            } else {
+                if (!$this->exist_foreign_key('clientes', 'clientes_fk1'))
+                    $this->db->exec('ALTER TABLE clientes ADD CONSTRAINT clientes_fk1 FOREIGN KEY (id_centroautorizado) REFERENCES tbl_centroautorizado (id) ON DELETE SET NULL ON UPDATE CASCADE');
             }
+
+            Tools::log()->info('Tabla Centro Autorizado Creada');
+            Tools::log()->info('Relacion Centro Autorizado -> Cliente Creada');
+        } else {
+
+            if (!$this->exist_column_name('clientes', 'id_centroautorizado')) {
+                $this->db->exec('ALTER TABLE clientes ADD COLUMN id_centroautorizado INTEGER AFTER web; ');
+                if (!$this->exist_foreign_key('clientes', 'clientes_fk1'))
+                    $this->db->exec('ALTER TABLE clientes ADD CONSTRAINT clientes_fk1 FOREIGN KEY (id_centroautorizado) REFERENCES tbl_centroautorizado (id) ON DELETE SET NULL ON UPDATE CASCADE');
+            } else {
+                if (!$this->exist_foreign_key('clientes', 'clientes_fk1'))
+                    $this->db->exec('ALTER TABLE clientes ADD CONSTRAINT clientes_fk1 FOREIGN KEY (id_centroautorizado) REFERENCES tbl_centroautorizado (id) ON DELETE SET NULL ON UPDATE CASCADE');
+            }
+
+            Tools::log()->info('Relación Centro Autorizado - Clientes Creada');
         }
 
-        if ($db->tableExists('tbl_centroautorizado')) {
-            if (!$exist_column_idcentroautorizado) {
-                $db->exec('ALTER TABLE clientes ADD COLUMN id_centroautorizado INTEGER AFTER web; ');
-                if (!$exist_fk_clientes_centroautorizado)
-                    $db->exec('ALTER TABLE clientes ADD CONSTRAINT `clientes_fk1` FOREIGN KEY (`id_centroautorizado`) REFERENCES `tbl_centroautorizado` (`id`) ON DELETE SET NULL ON UPDATE CASCADE');
-                //else Tools::log()->error('Ya existe la llave foranea clientes <-> centroautorizado');
-            } else {
-                if (!$exist_fk_clientes_centroautorizado)
-                    $db->exec('ALTER TABLE clientes ADD CONSTRAINT `clientes_fk1` FOREIGN KEY (`id_centroautorizado`) REFERENCES `tbl_centroautorizado` (`id`) ON DELETE SET NULL ON UPDATE CASCADE');
-                // else Tools::log()->error('Ya existe la llave foranea clientes <-> centroautorizado');
-            }
-        } /*else {
-            $hero = new CentroAutorizado();
-            //Tools::log()->error('No existe la tabla tbl_centroautorizado');
-        }*/
+        //-------------------------------------------------------------------------------------------------------- 
+
+        //--------------------------------------------- 
 
 
         $fecha = date('Y-m-d');
 
-        $verify_api_exists = $db->select("SELECT nick FROM api_keys WHERE nick='plugin_tacoluservicios'");
-        $verify_api_isenabled = $db->select("SELECT properties FROM settings");
+        $verify_api_exists = $this->db->select("SELECT nick FROM api_keys WHERE nick='plugin_tacoluservicios'");
+        $verify_api_isenabled = $this->db->select("SELECT properties FROM settings");
 
         $settings = json_decode($verify_api_isenabled[0]['properties']);
         //Enabling API Engine
         $settings->enable_api = true;
-        $db->exec("UPDATE `settings` SET `properties` ='" . json_encode($settings) . "'");
+        $this->db->exec("UPDATE settings SET properties ='" . json_encode($settings) . "'");
 
         // Create APy Key Access
         if (count($verify_api_exists) == 0)
-            $db->exec("INSERT INTO `api_keys`(`nick`,`apikey`,`creationdate`,`description`,`enabled`,`fullaccess`) 
+            $this->db->exec("INSERT INTO api_keys(nick,apikey,creationdate,description,enabled,fullaccess) 
             VALUES('plugin_tacoluservicios', 'Tacoluservicios2024**','$fecha','API para el plugin TacoluServicios', true, true)");
 
 
@@ -135,18 +159,59 @@ class Init extends InitClass
         Kernel::addRoute('/api/3/modelotacografo_manager', 'ModeloTacografoManager', -1);
         ApiRoot::addCustomResource('modelotacografo_manager');
 
-         //Categorias de Tacografos
-         Kernel::addRoute('/api/3/categoriatacografo_manager', 'CategoriaTacografoManager', -1);
-         ApiRoot::addCustomResource('categoriatacografo_manager');
+        //Categorias de Tacografos
+        Kernel::addRoute('/api/3/categoriatacografo_manager', 'CategoriaTacografoManager', -1);
+        ApiRoot::addCustomResource('categoriatacografo_manager');
 
-         //Tacografos
-         Kernel::addRoute('/api/3/tacografo_manager', 'TacografoManager', -1);
-         ApiRoot::addCustomResource('tacografo_manager');
+        //Tacografos
+        Kernel::addRoute('/api/3/tacografo_manager', 'TacografoManager', -1);
+        ApiRoot::addCustomResource('tacografo_manager');
     }
 
     public function uninstall(): void
     {
         // se ejecuta cada vez que se desinstale el plugin. Primero desinstala y luego ejecuta el uninstall.
+        Tools::log()->info('Plugin Tacoluservicios Desinstalado');
+
+        //------------------------------------ Centro autorizado -------------------------------------------
+
+        if ($this->exist_column_name('clientes', 'id_centroautorizado')) {
+            if ($this->exist_foreign_key('clientes', 'clientes_fk1')) {
+                $this->db->exec('ALTER TABLE clientes DROP FOREIGN KEY clientes_fk1;');
+                $this->db->exec('DROP TABLE tbl_centroautorizado;');
+
+                Tools::log()->info('Tabla tbl_centroautorizado Eliminada');
+            } else Tools::log()->info('Test 2 Failed');
+        } else Tools::log()->info('Test 1 Failed');
+
+
+
+
+        //--------------------------------------------------------------------------------------------------
+    }
+
+    private function exist_column_name($table_name, $column_name): bool
+    {
+
+        $result = $this->db->getColumns($table_name);
+        //detect column with fk
+        return array_key_exists($column_name, $result);
+    }
+
+    private function exist_foreign_key($table_name, $foreign_key_name): bool
+    {
+
+
+        $foreing_keys = $this->db->getConstraints($table_name);
+        $exist_fk = false;
+        foreach ($foreing_keys as $key) {
+            if ($key['name'] == $foreign_key_name) {
+                $exist_fk = true;
+                break;
+            }
+        }
+
+        return $exist_fk;
     }
 
     public function update(): void
