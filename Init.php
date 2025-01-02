@@ -69,11 +69,14 @@ class Init extends InitClass
         $orden = new OrdenTrabajo();
         $tipointervencion_x_ordentrabajo = new TipoIntervencionXOrdenTrabajo();
 
+        var_dump(Plugins::list());
 
-        if (is_plugin_active('Tacoluservicios')) {
-            Tools::log()->info('Relación Centro Autorizado - Clientes Creada');
+        if ( Plugins::isEnabled('Tacoluservicios') ) {
+            // el plugin Proyectos está instalado y activado
+        
+            Tools::log()->info('Tacoluservicios Activo');
 
-        } else Tools::log()->info('Relación Centro Autorizado - Clientes Creada');
+        } else Tools::log()->info('Tacoluservicios No Activo');
 
         //----------------------------------- Centro Autorizado ---------------------------------------------
         if (!$this->db->tableExists('tbl_centroautorizado')) {
