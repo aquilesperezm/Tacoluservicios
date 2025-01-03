@@ -40,21 +40,24 @@ use FacturaScripts\Plugin;
  */
 class Init extends InitClass
 {
-    private $db;
+    //private $db;
 
-    function __construct()
+   /* function __construct()
     {
         $this->db = new DataBase();
-    }
+    }*/
+
+    /**
+     *  Este metodo se ejecuta cuando 
+     * 
+     */
+
 
     public function init(): void
     {
-        // se ejecuta cada vez que carga FacturaScripts (si este plugin está activado).
+       
 
-        //verificar si tiene la estructura creada
-
-
-        $centro_autorizado = new CentroAutorizado();
+      /*  $centro_autorizado = new CentroAutorizado();
         $custom_cliente = new CustomCliente();
 
         $tipointervencion = new TipoIntervencion();
@@ -66,20 +69,11 @@ class Init extends InitClass
 
         $tacografo = new Tacografo();
         $vehiculo = new Vehiculo();
-        $orden = new OrdenTrabajo();
-        $tipointervencion_x_ordentrabajo = new TipoIntervencionXOrdenTrabajo();
-
-        var_dump(Plugins::list());
-
-        if ( Plugins::isEnabled('Tacoluservicios') ) {
-            // el plugin Proyectos está instalado y activado
-        
-            Tools::log()->info('Tacoluservicios Activo');
-
-        } else Tools::log()->info('Tacoluservicios No Activo');
+       // $orden = new OrdenTrabajo();
+       // $tipointervencion_x_ordentrabajo = new TipoIntervencionXOrdenTrabajo();
 
         //----------------------------------- Centro Autorizado ---------------------------------------------
-        if (!$this->db->tableExists('tbl_centroautorizado')) {
+        /*if (!$this->db->tableExists('tbl_centroautorizado')) {
 
             $this->db->exec("CREATE TABLE tbl_centroautorizado (codigo VARCHAR(50) COLLATE utf8mb4_unicode_520_ci 
             NOT NULL, id INTEGER(11) NOT NULL AUTO_INCREMENT, nombre VARCHAR(150) COLLATE utf8mb4_unicode_520_ci 
@@ -98,6 +92,7 @@ class Init extends InitClass
 
             Tools::log()->info('Tabla Centro Autorizado Creada');
             Tools::log()->info('Relacion Centro Autorizado -> Cliente Creada');
+
         } else {
 
             if (!$this->exist_column_name('clientes', 'id_centroautorizado')) {
@@ -110,14 +105,14 @@ class Init extends InitClass
             }
 
             Tools::log()->info('Relación Centro Autorizado - Clientes Creada');
-        }
+        }*/
 
         //-------------------------------------------------------------------------------------------------------- 
 
         //--------------------------------------------- 
 
 
-        $fecha = date('Y-m-d');
+        /*$fecha = date('Y-m-d');
 
         $verify_api_exists = $this->db->select("SELECT nick FROM api_keys WHERE nick='plugin_tacoluservicios'");
         $verify_api_isenabled = $this->db->select("SELECT properties FROM settings");
@@ -131,7 +126,7 @@ class Init extends InitClass
         if (count($verify_api_exists) == 0)
             $this->db->exec("INSERT INTO api_keys(nick,apikey,creationdate,description,enabled,fullaccess) 
             VALUES('plugin_tacoluservicios', 'Tacoluservicios2024**','$fecha','API para el plugin TacoluServicios', true, true)");
-
+*/
 
         //Register API 
         //Centro Autorizado
@@ -173,27 +168,10 @@ class Init extends InitClass
 
     public function uninstall(): void
     {
-        // se ejecuta cada vez que se desinstale el plugin. Primero desinstala y luego ejecuta el uninstall.
-        Tools::log()->info('Plugin Tacoluservicios Desinstalado');
-
-        //------------------------------------ Centro autorizado -------------------------------------------
-
-        if ($this->exist_column_name('clientes', 'id_centroautorizado')) {
-            if ($this->exist_foreign_key('clientes', 'clientes_fk1')) {
-                $this->db->exec('ALTER TABLE clientes DROP FOREIGN KEY clientes_fk1;');
-                $this->db->exec('DROP TABLE tbl_centroautorizado;');
-
-                Tools::log()->info('Tabla tbl_centroautorizado Eliminada');
-            } else Tools::log()->info('Test 2 Failed');
-        } else Tools::log()->info('Test 1 Failed');
-
-
-
-
-        //--------------------------------------------------------------------------------------------------
+        
     }
 
-    private function exist_column_name($table_name, $column_name): bool
+   /* private function exist_column_name($table_name, $column_name): bool
     {
 
         $result = $this->db->getColumns($table_name);
@@ -215,7 +193,7 @@ class Init extends InitClass
         }
 
         return $exist_fk;
-    }
+    }*/
 
     public function update(): void
     {
